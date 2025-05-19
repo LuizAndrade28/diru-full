@@ -1,38 +1,27 @@
-// // To see this message, add the following to the `<head>` section in your
-// // views/layouts/application.html.erb
-// //
-// //    <%= vite_client_tag %>
-// //    <%= vite_javascript_tag 'application' %>
-// console.log('Vite ⚡️ Rails')
-
-// // If using a TypeScript entrypoint file:
-// //     <%= vite_typescript_tag 'application' %>
-// //
-// // If you want to use .jsx or .tsx, add the extension:
-// //     <%= vite_javascript_tag 'application.jsx' %>
-
-// console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify.app/guide/rails')
-
-// // Example: Load Rails libraries in Vite.
-// //
-// // import * as Turbo from '@hotwired/turbo'
-// // Turbo.start()
-// //
-// // import ActiveStorage from '@rails/activestorage'
-// // ActiveStorage.start()
-// //
-// // // Import all channels.
-// // const channels = import.meta.globEager('./**/*_channel.js')
-
-// // Example: Import a stylesheet in app/frontend/index.css
-// // import '~/index.css'
-
-
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import Dashboard from "../components/Dashboard";
+// import ExpensesIndex from "../components/ExpensesIndex";
+// import MonthlyReport from "../components/MonthlyReport";
+import Navbar from "../components/Navbar";
+
+// import "../styles/application.scss"; // opcional
 
 function App() {
-  return <h1>Vite + Rails + React 18 funcionando!</h1>;
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        {/* <Route path="/gastos" element={<ExpensesIndex />} />
+        <Route path="/resumos" element={<MonthlyReport />} /> */}
+        {/* fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 const el = document.getElementById("root");
