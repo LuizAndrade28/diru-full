@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../styles/Dashboard.scss";
 
 export default function Dashboard() {
   const [summary, setSummary] = useState(); // começa undefined, não null
