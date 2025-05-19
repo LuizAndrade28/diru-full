@@ -1,0 +1,10 @@
+class CreateFamilies < ActiveRecord::Migration[8.0]
+  def change
+    create_table :families do |t|
+      t.string :name
+
+      t.timestamps
+    end
+    add_index :families, :name
+  end
+end
