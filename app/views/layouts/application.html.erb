@@ -18,11 +18,12 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <%# Include Vite client and React Refresh %>
     <%= vite_client_tag %>          <!-- carrega /@vite/client -->
     <%= vite_react_refresh_tag %>   <!-- carrega /@react-refresh  ✅ -->
     <%= vite_javascript_tag "application.jsx" %>
-
   </head>
 
   <body>
