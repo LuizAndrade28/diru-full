@@ -16,6 +16,13 @@ class TransactionsController < ApplicationController
     respond_with(@transactions)
   end
 
+  def higher_category
+    category_totals = current_user.transactions.where(kind: :expense).group(:category).sum(:amount)
+    highest_category, total = category_totals.max_by { |_, sum| sum }
+    @transaction = { category: highest_category, total: total }
+    respond_with(@transaction)
+  end
+
   def show
     respond_with(@transaction)
   end
