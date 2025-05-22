@@ -4,11 +4,10 @@ Rails.application.routes.draw do
 
   devise_for :users
   get "/me", to: "users#me"
-  
+
   root "home#index"
 
   resources :accounts
-  resources :categories
   resources :transactions
   resources :bills do
     post :generate_transaction, on: :member

@@ -28,7 +28,7 @@ export default function Dashboard() {
       <ul>
         {summary.last.map((t) => (
           <li key={t.id}>
-            {t.notes} – {converterAmount(t.amount)} - {t.bank_name} - {t.category_id}
+            {t.notes} – {converterAmount(t.amount)} - {t.bank_name} - {t.category}
           </li>
         ))}
       </ul>
