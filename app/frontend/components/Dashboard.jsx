@@ -1,23 +1,68 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Dashboard.scss";
+import { fetchTransactions } from "../services/fetchTransactions";
+import { fetchCurrentUser } from "../services/fetchCurrentUser";
 
 export default function Dashboard() {
-  const [summary, setSummary] = useState(); // começa undefined, não null
+  const [summary, setSummary] = useState();
+  const converterAmount = (amount) =>
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(amount);
 
   useEffect(() => {
-    fetch("/transactions.json?start=&end=", {
-      credentials: "include",
-      headers: { Accept: "application/json" }, // força JSON
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        // 👉 substitua 1234 por uma soma real quando tiver o campo certo
-        const total = data
+    async function loadData() {
+      try {
+        const transactions = await fetchTransactions();
+
+        const total = transactions
           .filter((t) => t.notes !== "Salário mensal")
           .reduce((sum, t) => sum + Number(t.amount), 0);
-        setSummary({ last: data.slice(0, 5), totalMonth: total });
-      })
-      .catch(console.error);
+
+        const agrupado = transactions
+          .filter((t) => t.kind == "expense")
+          .reduce((acc, item) => {
+            const banco = item.bank_name;
+            const valor = parseFloat(item.amount); // garantir que é número
+
+            if (!acc[banco]) {
+              acc[banco] = 0;
+            }
+
+            acc[banco] += valor;
+            return acc;
+          }, {})
+
+        const higherBank = Object.keys(agrupado)
+          .map((key) => ({ bank_name: key, total: agrupado[key] }))
+          .reduce(
+            (higher, value) => {
+              return value.total > higher.total ? value : higher;
+            },
+              { bank_name: null, total: 0 }
+          );
+
+        // Pegue o userId da primeira transação (ajuste se necessário)
+        const userId = transactions[0]?.user_id;
+        let userName;
+        if (userId) {
+          const user = await fetchCurrentUser(userId);
+          userName = user.first_name || "Usuário";
+        }
+
+        setSummary({
+          last: transactions
+                .filter((t) => t.notes !== "Salário mensal"),
+          totalMonth: total,
+          userName,
+          higherBank,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
   }, []);
 
   /* enquanto não chegou → mostre loading  */
@@ -26,17 +71,20 @@ export default function Dashboard() {
   return (
     <div className="container mt-4">
       <h1>Resumo do mês</h1>
+      <h2>Olá, {summary.userName}</h2>
       <p>Total de despesas: R$ {summary.totalMonth}</p>
+      <p>
+        Banco com mais gastos: {summary.higherBank.bank_name} -
+        {converterAmount(summary.higherBank.total)}
+      </p>
 
       <h2>Últimos gastos</h2>
       <ul>
-        {summary.last
-          .filter((t) => t.notes !== "Salário mensal")
-          .map((t) => (
-            <li key={t.id}>
-              {t.notes} – R$ {t.amount}
-            </li>
-          ))}
+        {summary.last.map((t) => (
+          <li key={t.id}>
+            {t.notes} – {converterAmount(t.amount)} - {t.bank_name}
+          </li>
+        ))}
       </ul>
     </div>
   );
