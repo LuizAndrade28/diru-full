@@ -3,18 +3,12 @@ Transaction.destroy_all
 Account.destroy_all
 User.destroy_all
 Family.destroy_all
-Category.destroy_all
 
 # 1) Família e Usuários
 user1  = User.create!(email: "luiz@example.com", first_name: "Luiz", last_name: "Andrade", password: "12345678")
 user2  = User.create!(email: "cecilia@example.com", first_name: "Cecilia", last_name: "Andrade", password: "12345678")
 
-# 2) Categorias
-%w[Alimentação Transporte Lazer Salário Outros].each do |cat|
-  Category.create!(name: cat)
-end
-
-# 3) Transações
+# 2) Transações
 today = Date.current
 user1.transactions.create!(
   kind:           :income,
@@ -23,7 +17,7 @@ user1.transactions.create!(
   notes:          "Salário mensal",
   bank_name:      "Empresa X",
   account:        user1.accounts.first,
-  category:       Category.find_by(name: "Salário")
+  category:       :salary
 )
 
 expenses = [
@@ -34,7 +28,7 @@ expenses = [
     notes: "Almoço com amigos",
     bank_name: "Itaú",
     account: user1.accounts.first,
-    category: Category.find_by(name: "Alimentação")
+    category: :food
   },
   {
     kind: :expense,
@@ -43,7 +37,7 @@ expenses = [
     notes: "Cinema",
     bank_name: "Nubank",
     account: user1.accounts.first,
-    category: Category.find_by(name: "Lazer")
+    category: :leisure
   },
   {
     kind: :expense,
@@ -52,7 +46,7 @@ expenses = [
     notes: "Supermercado",
     bank_name: "Itaú",
     account: user1.accounts.first,
-    category: Category.find_by(name: "Alimentação")
+    category: :food
   },
   {
     kind: :expense,
@@ -61,7 +55,7 @@ expenses = [
     notes: "Uber para o trabalho",
     bank_name: "Nubank",
     account: user1.accounts.first,
-    category: Category.find_by(name: "Transporte")
+    category: :transport
   },
   {
     kind: :expense,
@@ -70,7 +64,7 @@ expenses = [
     notes: "Assinatura de revista",
     bank_name: "Itaú",
     account: user1.accounts.first,
-    category: Category.find_by(name: "Outros")
+    category: :other
   },
   {
     kind: :expense,
@@ -79,24 +73,13 @@ expenses = [
     notes: "Consulta médica",
     bank_name: "Nubank",
     account: user1.accounts.first,
-    category: Category.find_by(name: "Outros")
+    category: :health
   }
 ]
 
 expenses.each do |expense|
   user1.transactions.create!(expense)
 end
-
-user1.transactions.create!(
-  kind:            :expense,
-  amount:          200.00,
-  happened_at:     today - 3,
-  notes:           "Gasolina carro",
-  bank_name:       "Itaú",
-  installments_qty: 2,
-  account:        user1.accounts.first,
-  category:        Category.find_by(name: "Transporte")
-)
 
 # 3) Fatura recorrente
 bill = user2.accounts.first.bills.create!(

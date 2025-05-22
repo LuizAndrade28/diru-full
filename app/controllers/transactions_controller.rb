@@ -51,9 +51,9 @@ class TransactionsController < ApplicationController
 
   def transaction_params
     params.require(:transaction).permit(
-      :kind, :amount, :happened_at, :notes,
+      :kind, :category, :amount, :happened_at, :notes,
       :installments_qty, :bank_name,
-      :account_id, :category_id, :original_id
+      :account_id, :original_id
     )
   end
 end
