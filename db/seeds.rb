@@ -26,12 +26,73 @@ user1.transactions.create!(
   category:       Category.find_by(name: "Salário")
 )
 
+expenses = [
+  {
+    kind: :expense,
+    amount: 100.00,
+    happened_at: today - rand(1..10),
+    notes: "Almoço com amigos",
+    bank_name: "Itaú",
+    account: user1.accounts.first,
+    category: Category.find_by(name: "Alimentação")
+  },
+  {
+    kind: :expense,
+    amount: 50.00,
+    happened_at: today - rand(1..10),
+    notes: "Cinema",
+    bank_name: "Nubank",
+    account: user1.accounts.first,
+    category: Category.find_by(name: "Lazer")
+  },
+  {
+    kind: :expense,
+    amount: 120.00,
+    happened_at: today - rand(1..10),
+    notes: "Supermercado",
+    bank_name: "Itaú",
+    account: user1.accounts.first,
+    category: Category.find_by(name: "Alimentação")
+  },
+  {
+    kind: :expense,
+    amount: 80.00,
+    happened_at: today - rand(1..10),
+    notes: "Uber para o trabalho",
+    bank_name: "Nubank",
+    account: user1.accounts.first,
+    category: Category.find_by(name: "Transporte")
+  },
+  {
+    kind: :expense,
+    amount: 30.00,
+    happened_at: today - rand(1..10),
+    notes: "Assinatura de revista",
+    bank_name: "Itaú",
+    account: user1.accounts.first,
+    category: Category.find_by(name: "Outros")
+  },
+  {
+    kind: :expense,
+    amount: 200.00,
+    happened_at: today - rand(1..10),
+    notes: "Consulta médica",
+    bank_name: "Nubank",
+    account: user1.accounts.first,
+    category: Category.find_by(name: "Outros")
+  }
+]
+
+expenses.each do |expense|
+  user1.transactions.create!(expense)
+end
+
 user1.transactions.create!(
   kind:            :expense,
   amount:          200.00,
   happened_at:     today - 3,
   notes:           "Gasolina carro",
-  bank_name:       "Itau",
+  bank_name:       "Itaú",
   installments_qty: 2,
   account:        user1.accounts.first,
   category:        Category.find_by(name: "Transporte")
