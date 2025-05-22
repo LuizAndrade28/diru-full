@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from "react";
-import "../styles/Dashboard.scss";
+import React from "react";
+import "../styles/dashboard.scss";
+import { useMainFetch } from "../hooks/useMainFetch";
 
 export default function Dashboard() {
-  const [summary, setSummary] = useState(); // começa undefined, não null
+  const summary = useMainFetch();
 
-  useEffect(() => {
-    fetch("/transactions.json?start=&end=", {
-      credentials: "include",
-      headers: { Accept: "application/json" }, // força JSON
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        // 👉 substitua 1234 por uma soma real quando tiver o campo certo
-        const total = data
-          .filter((t) => t.notes !== "Salário mensal")
-          .reduce((sum, t) => sum + Number(t.amount), 0);
-        setSummary({ last: data.slice(0, 5), totalMonth: total });
-      })
-      .catch(console.error);
-  }, []);
+  const converterAmount = (amount) =>
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(amount);
 
   /* enquanto não chegou → mostre loading  */
   if (!summary) return <p>Carregando…</p>;
@@ -26,17 +17,20 @@ export default function Dashboard() {
   return (
     <div className="container mt-4">
       <h1>Resumo do mês</h1>
+      <h2>Olá, {summary.userName}</h2>
       <p>Total de despesas: R$ {summary.totalMonth}</p>
+      <p>
+        Banco com mais gastos: {summary.higherBank.bank_name} -
+        {converterAmount(summary.higherBank.total)}
+      </p>
 
       <h2>Últimos gastos</h2>
       <ul>
-        {summary.last
-          .filter((t) => t.notes !== "Salário mensal")
-          .map((t) => (
-            <li key={t.id}>
-              {t.notes} – R$ {t.amount}
-            </li>
-          ))}
+        {summary.last.map((t) => (
+          <li key={t.id}>
+            {t.notes} – {converterAmount(t.amount)} - {t.bank_name} - {t.category_id}
+          </li>
+        ))}
       </ul>
     </div>
   );
