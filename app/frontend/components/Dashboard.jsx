@@ -1,6 +1,7 @@
 import React from "react";
-import "../styles/dashboard.scss";
-import { useMainFetch } from "../hooks/useMainFetch";
+import "../src/styles/dashboard.scss";
+import { useMainFetch } from "../src/hooks/useMainFetch";
+import { formatDatePtBR } from "../src/utils/formatters";
 import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
@@ -26,7 +27,8 @@ export default function Dashboard() {
         {converterAmount(summary.higherBank.total)}
       </p>
       <p>
-        Categoria com mais gastos: {t(`categories.${summary.higherCategory.category}`)} -
+        Categoria com mais gastos:{" "}
+        {t(`categories.${summary.higherCategory.category}`)} -
         {converterAmount(summary.higherCategory.total)}
       </p>
 
@@ -35,7 +37,8 @@ export default function Dashboard() {
         {summary.last.map((transaction) => (
           <li key={transaction.id}>
             {transaction.notes} – {converterAmount(transaction.amount)} -{" "}
-            {transaction.bank_name} - {t(`categories.${transaction.category}`)}
+            {transaction.bank_name} - {t(`categories.${transaction.category}`)}{" "}
+            - {formatDatePtBR(transaction.happened_at)} - {transaction.owner}
           </li>
         ))}
       </ul>
