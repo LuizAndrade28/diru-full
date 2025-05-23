@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchTransactions } from "./fetchTransactions";
 import { fetchCurrentUser } from "./fetchCurrentUser";
 import { fetchHigherCategory } from "./fetchHigherCategory"
+import { fetchUsersExpenses } from "./fetchUsersExpenses"
 
 export function useMainFetch() {
   const [summary, setSummary] = useState();
@@ -11,6 +12,9 @@ export function useMainFetch() {
       try {
         const transactions = await fetchTransactions();
         const higherCategory = await fetchHigherCategory();
+        const usersExpenses = await fetchUsersExpenses();
+        console.log(usersExpenses);
+
 
         const total = transactions
           .filter((t) => t.notes !== "Salário mensal")
@@ -43,7 +47,8 @@ export function useMainFetch() {
           totalMonth: total,
           userName,
           higherBank,
-          higherCategory
+          higherCategory,
+          usersExpenses
         });
       } catch (err) {
         console.error(err);

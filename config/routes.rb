@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :transactions do
     collection do
       get :higher_category
+      get :users_expenses
     end
   end
   resources :bills do

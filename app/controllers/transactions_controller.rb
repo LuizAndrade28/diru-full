@@ -2,6 +2,8 @@ class TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_transaction, only: %i[show edit update destroy]
 
+  require 'irb'
+
   respond_to :html, :json
 
   # GET /transactions
@@ -18,9 +20,26 @@ class TransactionsController < ApplicationController
 
   def higher_category
     category_totals = current_user.transactions.where(kind: :expense).group(:category).sum(:amount)
+
     highest_category, total = category_totals.max_by { |_, sum| sum }
     @transaction = { category: highest_category, total: total }
-    respond_with(@transaction)
+
+    render json: @transaction
+  end
+
+  def users_expenses
+    users_expenses_raw = current_user.transactions.where(kind: :expense).group(:owner).sum(:amount)
+
+    result = users_expenses_raw.map do |owner, total|
+      user = User.find_by(first_name: owner)
+      {
+        owner: owner,
+        total: total,
+        user_id: user&.id
+      }
+    end
+    # binding.irb
+    render json: result
   end
 
   def show
@@ -60,7 +79,7 @@ class TransactionsController < ApplicationController
     params.require(:transaction).permit(
       :kind, :category, :amount, :happened_at, :notes,
       :installments_qty, :bank_name,
-      :account_id, :original_id
+      :account_id, :original_id, :owner
     )
   end
 end

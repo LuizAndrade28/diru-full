@@ -32,6 +32,12 @@ export default function Dashboard() {
         {converterAmount(summary.higherCategory.total)}
       </p>
 
+      {summary.usersExpenses.map((expense) => (
+        <p key={expense.user_id || expense.owner}>
+          {expense.owner}: {converterAmount(expense.total)}
+        </p>
+      ))}
+
       <h2 className="mt-4">Últimos gastos</h2>
       <ul>
         {summary.last.map((transaction) => (
