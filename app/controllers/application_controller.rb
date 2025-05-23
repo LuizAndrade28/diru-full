@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception      # CSRF p/ HTML (Ajax usa o token)
+  protect_from_forgery with: :null_session      # CSRF p/ HTML (Ajax usa o token)
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
 

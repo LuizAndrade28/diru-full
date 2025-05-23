@@ -1,12 +1,13 @@
 # Limpa o banco de dados e remove os dados de teste
 Transaction.destroy_all
-Account.destroy_all
-User.destroy_all
-Family.destroy_all
+# Account.destroy_all
+# User.destroy_all
+# Family.destroy_all
 
-# 1) Família e Usuários
-user1  = User.create!(email: "luiz@example.com", first_name: "Luiz", last_name: "Andrade", password: "12345678")
-user2  = User.create!(email: "cecilia@example.com", first_name: "Cecilia", last_name: "Andrade", password: "12345678")
+# # 1) Família e Usuários
+# user1  = User.create!(email: "luiz@example.com", first_name: "Luiz", last_name: "Andrade", password: "12345678")
+user1 = User.find_by(email: "luiz@example.com")
+# user2  = User.create!(email: "cecilia@example.com", first_name: "Cecilia", last_name: "Andrade", password: "12345678")
 
 # 2) Transações
 today = Date.current
@@ -28,7 +29,8 @@ expenses = [
     notes: "Almoço com amigos",
     bank_name: "Itaú",
     account: user1.accounts.first,
-    category: :food
+    category: :food,
+    owner: "Cecilia"
   },
   {
     kind: :expense,
@@ -37,7 +39,8 @@ expenses = [
     notes: "Cinema",
     bank_name: "Nubank",
     account: user1.accounts.first,
-    category: :leisure
+    category: :leisure,
+    owner: "Cecilia"
   },
   {
     kind: :expense,
@@ -46,7 +49,8 @@ expenses = [
     notes: "Supermercado",
     bank_name: "Itaú",
     account: user1.accounts.first,
-    category: :food
+    category: :food,
+    owner: user1.first_name
   },
   {
     kind: :expense,
@@ -55,7 +59,8 @@ expenses = [
     notes: "Uber para o trabalho",
     bank_name: "Nubank",
     account: user1.accounts.first,
-    category: :transport
+    category: :transport,
+    owner: "Cecilia"
   },
   {
     kind: :expense,
@@ -64,7 +69,8 @@ expenses = [
     notes: "Assinatura de revista",
     bank_name: "Itaú",
     account: user1.accounts.first,
-    category: :other
+    category: :other,
+    owner: user1.first_name
   },
   {
     kind: :expense,
@@ -73,7 +79,8 @@ expenses = [
     notes: "Consulta médica",
     bank_name: "Nubank",
     account: user1.accounts.first,
-    category: :health
+    category: :health,
+    owner: user1.first_name
   }
 ]
 
@@ -81,12 +88,12 @@ expenses.each do |expense|
   user1.transactions.create!(expense)
 end
 
-# 3) Fatura recorrente
-bill = user2.accounts.first.bills.create!(
-  amount:       150.00,
-  description:  "Plano de Streaming",
-  frequency:    :monthly,
-  next_due_date: today + 2.days
-)
-# Gera a primeira transação da fatura
-bill.generate_transaction!
+# # 3) Fatura recorrente
+# bill = user2.accounts.first.bills.create!(
+#   amount:       150.00,
+#   description:  "Plano de Streaming",
+#   frequency:    :monthly,
+#   next_due_date: today + 2.days
+# )
+# # Gera a primeira transação da fatura
+# bill.generate_transaction!

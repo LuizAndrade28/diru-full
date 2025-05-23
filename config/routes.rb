@@ -8,7 +8,12 @@ Rails.application.routes.draw do
   root "home#index"
 
   resources :accounts
-  resources :transactions
+  resources :transactions do
+    collection do
+      get :higher_category
+      get :users_expenses
+    end
+  end
   resources :bills do
     post :generate_transaction, on: :member
   end

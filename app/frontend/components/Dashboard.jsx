@@ -1,9 +1,12 @@
 import React from "react";
-import "../styles/dashboard.scss";
-import { useMainFetch } from "../hooks/useMainFetch";
+import "../src/styles/dashboard.scss";
+import { useMainFetch } from "../src/hooks/useMainFetch";
+import { formatDatePtBR } from "../src/utils/formatters";
+import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
   const summary = useMainFetch();
+  const { t } = useTranslation();
 
   const converterAmount = (amount) =>
     new Intl.NumberFormat("pt-BR", {
@@ -23,12 +26,25 @@ export default function Dashboard() {
         Banco com mais gastos: {summary.higherBank.bank_name} -
         {converterAmount(summary.higherBank.total)}
       </p>
+      <p>
+        Categoria com mais gastos:{" "}
+        {t(`categories.${summary.higherCategory.category}`)} -
+        {converterAmount(summary.higherCategory.total)}
+      </p>
 
-      <h2>Últimos gastos</h2>
+      {summary.usersExpenses.map((expense) => (
+        <p key={expense.user_id || expense.owner}>
+          {expense.owner}: {converterAmount(expense.total)}
+        </p>
+      ))}
+
+      <h2 className="mt-4">Últimos gastos</h2>
       <ul>
-        {summary.last.map((t) => (
-          <li key={t.id}>
-            {t.notes} – {converterAmount(t.amount)} - {t.bank_name} - {t.category}
+        {summary.last.map((transaction) => (
+          <li key={transaction.id}>
+            {transaction.notes} – {converterAmount(transaction.amount)} -{" "}
+            {transaction.bank_name} - {t(`categories.${transaction.category}`)}{" "}
+            - {formatDatePtBR(transaction.happened_at)} - {transaction.owner}
           </li>
         ))}
       </ul>

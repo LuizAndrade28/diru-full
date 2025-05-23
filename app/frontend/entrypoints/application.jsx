@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import "../src/i18n";
 
 import Dashboard from "../components/Dashboard";
 // import ExpensesIndex from "../components/ExpensesIndex";
