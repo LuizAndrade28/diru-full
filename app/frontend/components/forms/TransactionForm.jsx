@@ -41,7 +41,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
       });
 
       if (!res.ok) throw await res.json();
-      
+
       const created = await res.json();
       onSuccess?.(created);
       setForm({ ...form, amount: "", notes: "" });
@@ -94,6 +94,28 @@ export default function TransactionForm({ account, enums, onSuccess }) {
         />
       </div>
 
+      <div className="col-sm-4">
+        <label className="form-label">{t("transactions.owner")}</label>
+        <input
+          type="text"
+          name="owner"
+          className="form-control"
+          value={form.owner}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="col-sm-4">
+        <label className="form-label">{t("transactions.installments")}</label>
+        <input
+          type="number"
+          name="installments"
+          className="form-control"
+          value={form.installments}
+          onChange={handleChange}
+        />
+      </div>
+
       <div className="row g-3">
         <div className="col-sm-4">
           <label className="form-label">{t("transactions.category")}</label>
@@ -104,7 +126,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
             onChange={handleChange}
             required
           >
-            <option value="">{t("global.choose")}</option>
+            <option value=""></option>
             {Object.keys(enums.categories).map((key) => (
               <option key={key} value={key}>
                 {t(`categories.${key}`)}
@@ -122,7 +144,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
             onChange={handleChange}
             required
           >
-            <option value="">{t("global.choose")}</option>
+            <option value=""></option>
             {Object.keys(enums.bank_names).map((key) => (
               <option key={key} value={key}>
                 {key
@@ -142,7 +164,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
             onChange={handleChange}
             required
           >
-            <option value="">{t("global.choose")}</option>
+            <option value=""></option>
             {Object.keys(enums.kinds).map((key) => (
               <option key={key} value={key}>
                 {key
@@ -159,7 +181,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
         className="btn btn-primary mt-3"
         disabled={submitting}
       >
-        {submitting ? t("global.saving") : t("global.save")}
+        {submitting ? t("form.global.saving") : t("form.global.save")}
       </button>
     </form>
   );
