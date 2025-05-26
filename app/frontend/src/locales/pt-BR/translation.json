@@ -48,7 +48,8 @@
     "owner": "Dono",
     "notes": "Observações",
     "kind": "Tipo",
-    "installments": "Qtd. Parcelas"
+    "installments": "Qtd. Parcelas",
+    "new": "Nova transação"
   },
 
   "form": {

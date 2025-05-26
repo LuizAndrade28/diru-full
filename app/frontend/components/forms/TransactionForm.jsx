@@ -44,7 +44,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
 
       const created = await res.json();
       onSuccess?.(created);
-      setForm({ ...form, amount: "", notes: "" });
+      setForm({ ...form, amount: "", notes: "", category: "", bank_name: "", kind: "", owner: "", happened_at: "" });
     } catch (err) {
       setError(err.errors ? err.errors.join(", ") : err.message);
     } finally {
