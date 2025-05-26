@@ -3,9 +3,10 @@ import "../src/styles/dashboard.scss";
 import { useMainFetch } from "../src/hooks/useMainFetch";
 import { formatDatePtBR } from "../src/utils/formatters";
 import { useTranslation } from "react-i18next";
+import TransactionForm from "./forms/TransactionForm";
 
 export default function Dashboard() {
-  const summary = useMainFetch();
+  const { summary, refetch } = useMainFetch();
   const { t } = useTranslation();
 
   const converterAmount = (amount) =>
@@ -19,8 +20,10 @@ export default function Dashboard() {
 
   return (
     <div className="container mt-4">
+      <TransactionForm account={summary.userAccount.id} enums={summary.enums} onSuccess={refetch} />
+
       <h1>Resumo do mês</h1>
-      <h2>Olá, {summary.userName}</h2>
+      <h2>Olá, {summary.user.first_name}</h2>
       <p>Total de despesas: R$ {summary.totalMonth}</p>
       <p>
         Banco com mais gastos: {summary.higherBank.bank_name} -

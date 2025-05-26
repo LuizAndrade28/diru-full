@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_23_170943) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_23_212057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,7 +52,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_23_170943) do
 
   create_table "transactions", force: :cascade do |t|
     t.integer "kind", default: 0, null: false
-    t.string "bank_name"
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.date "happened_at", null: false
     t.text "notes"
@@ -65,7 +64,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_23_170943) do
     t.datetime "updated_at", null: false
     t.integer "category"
     t.string "owner"
+    t.integer "bank_name"
     t.index ["account_id"], name: "index_transactions_on_account_id"
+    t.index ["bank_name"], name: "index_transactions_on_bank_name"
     t.index ["bill_id"], name: "index_transactions_on_bill_id"
     t.index ["category"], name: "index_transactions_on_category"
     t.index ["happened_at"], name: "index_transactions_on_happened_at"

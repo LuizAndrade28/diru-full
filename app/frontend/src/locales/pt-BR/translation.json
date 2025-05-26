@@ -33,5 +33,36 @@
     "home_improvement": "Reformas",
     "car_expenses": "Despesas com carro",
     "electronics": "Eletrônicos"
+  },
+
+  "transactions": {
+    "date": "Data",
+    "description": "Descrição",
+    "amount": "Valor",
+    "category": "Categoria",
+    "bank": "Banco",
+    "type": {
+      "income": "Receita",
+      "expense": "Despesa"
+    },
+    "owner": "Dono",
+    "notes": "Observações",
+    "kind": "Tipo",
+    "installments": "Qtd. Parcelas",
+    "new": "Nova transação"
+  },
+
+  "form": {
+    "add_transaction": "Adicionar transação",
+    "edit_transaction": "Editar transação",
+    "delete_transaction": "Excluir transação",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm_delete": "Você tem certeza que deseja excluir esta transação?",
+    "required_field": "Campo obrigatório",
+    "global": {
+      "saving": "Salvando...",
+      "save" : "Salvar"
+    }
   }
 }

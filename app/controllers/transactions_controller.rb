@@ -52,8 +52,13 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = current_user.transactions.build(transaction_params)
-    flash[:notice] = "Transação criada." if @transaction.save
-    respond_with(@transaction, location: transactions_path)
+    if @transaction.save
+      flash[:notice] = "Transação criada."
+      respond_with(@transaction, location: transactions_path)
+    else
+      flash[:alert] = "Erro ao criar transação."
+      respond_with(@transaction, location: new_transaction_path)
+    end
   end
 
   def edit; end
