@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { fetchTransactions } from "./fetchTransactions";
 import { fetchCurrentUser } from "./fetchCurrentUser";
+import { fetchUserAccount } from "./fetchUserAccount";
 import { fetchHigherCategory } from "./fetchHigherCategory"
 import { fetchUsersExpenses } from "./fetchUsersExpenses"
+import { fetchEnums } from "./fetchEnums";
 
 export function useMainFetch() {
   const [summary, setSummary] = useState();
@@ -10,11 +12,15 @@ export function useMainFetch() {
   useEffect(() => {
     async function loadData() {
       try {
-        const transactions = await fetchTransactions();
-        const higherCategory = await fetchHigherCategory();
-        const usersExpenses = await fetchUsersExpenses();
-        console.log(usersExpenses);
-
+        const [transactions, higherCategory, usersExpenses, enums, user, userAccount] =
+          await Promise.all([
+            fetchTransactions(),
+            fetchHigherCategory(),
+            fetchUsersExpenses(),
+            fetchEnums(),
+            fetchCurrentUser(),
+            fetchUserAccount(),
+          ]);
 
         const total = transactions
           .filter((t) => t.notes !== "Salário mensal")
@@ -37,18 +43,15 @@ export function useMainFetch() {
             { bank_name: null, total: 0 }
           );
 
-        // Busca o usuário logado
-        const user = await fetchCurrentUser();
-        const userName =
-          user.first_name || user.name || user.email || "Usuário";
-
         setSummary({
+          enums,
           last: transactions.filter((t) => t.notes !== "Salário mensal"),
           totalMonth: total,
-          userName,
+          user,
           higherBank,
           higherCategory,
-          usersExpenses
+          usersExpenses,
+          userAccount,
         });
       } catch (err) {
         console.error(err);
