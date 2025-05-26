@@ -3,10 +3,12 @@ class Account < ApplicationRecord
   has_many   :transactions, dependent: :destroy
   has_many   :bills,        dependent: :destroy
 
-  validates :opening_balance, presence: true
-
   # Current balance calculated in the query:
-  def current_balance
-    opening_balance + transactions.sum(:amount)
+  def current_monthly_balance
+    transactions.where(kind: :expense).sum(:amount)
+  end
+
+  def as_json(options = {})
+    super(options).merge(current_monthly_balance: current_monthly_balance)
   end
 end

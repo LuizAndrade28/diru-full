@@ -27,9 +27,6 @@ class User < ApplicationRecord
 
   # Callback 2: cria a conta padrão
   def create_default_account
-    accounts.create!(
-      name:            "Conta Corrente",
-      opening_balance: 0
-    )
+    create_account!
   end
 end
