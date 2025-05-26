@@ -16,8 +16,8 @@ user1.transactions.create!(
   amount:         3000.00,
   happened_at:    today - 5,
   notes:          "Salário mensal",
-  bank_name:      "Empresa X",
-  account:        user1.accounts.first,
+  bank_name:      :nubank,
+  account:        user1.account,
   category:       :salary
 )
 
@@ -27,8 +27,8 @@ expenses = [
     amount: 100.00,
     happened_at: today - rand(1..10),
     notes: "Almoço com amigos",
-    bank_name: "Itaú",
-    account: user1.accounts.first,
+    bank_name: :itau,
+    account: user1.account,
     category: :food,
     owner: "Cecilia"
   },
@@ -37,8 +37,8 @@ expenses = [
     amount: 50.00,
     happened_at: today - rand(1..10),
     notes: "Cinema",
-    bank_name: "Nubank",
-    account: user1.accounts.first,
+    bank_name: :nubank,
+    account: user1.account,
     category: :leisure,
     owner: "Cecilia"
   },
@@ -47,8 +47,8 @@ expenses = [
     amount: 120.00,
     happened_at: today - rand(1..10),
     notes: "Supermercado",
-    bank_name: "Itaú",
-    account: user1.accounts.first,
+    bank_name: :itau,
+    account: user1.account,
     category: :food,
     owner: user1.first_name
   },
@@ -57,8 +57,8 @@ expenses = [
     amount: 80.00,
     happened_at: today - rand(1..10),
     notes: "Uber para o trabalho",
-    bank_name: "Nubank",
-    account: user1.accounts.first,
+    bank_name: :nubank,
+    account: user1.account,
     category: :transport,
     owner: "Cecilia"
   },
@@ -67,8 +67,8 @@ expenses = [
     amount: 30.00,
     happened_at: today - rand(1..10),
     notes: "Assinatura de revista",
-    bank_name: "Itaú",
-    account: user1.accounts.first,
+    bank_name: :itau,
+    account: user1.account,
     category: :other,
     owner: user1.first_name
   },
@@ -77,8 +77,8 @@ expenses = [
     amount: 200.00,
     happened_at: today - rand(1..10),
     notes: "Consulta médica",
-    bank_name: "Nubank",
-    account: user1.accounts.first,
+    bank_name: :nubank,
+    account: user1.account,
     category: :health,
     owner: user1.first_name
   }

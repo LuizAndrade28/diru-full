@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   devise_for :users
   get "/me", to: "users#me"
+  get "/account", to: "users#account"
+  get "meta/enums", to: "meta#enums"
 
   root "home#index"
 
