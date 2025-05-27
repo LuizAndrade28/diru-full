@@ -1,26 +1,37 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+
 import { fetchTransactions } from "./fetchTransactions";
+import { fetchHigherCategory } from "./fetchHigherCategory";
+import { fetchUsersExpenses } from "./fetchUsersExpenses";
+import { fetchEnums } from "./fetchEnums";
 import { fetchCurrentUser } from "./fetchCurrentUser";
 import { fetchUserAccount } from "./fetchUserAccount";
-import { fetchHigherCategory } from "./fetchHigherCategory"
-import { fetchUsersExpenses } from "./fetchUsersExpenses"
-import { fetchEnums } from "./fetchEnums";
+import { fetchInvitesPending } from "./fetchInvitesPending";
 
 export function useMainFetch() {
   const [summary, setSummary] = useState(null);
 
   const loadData = useCallback(async () => {
     const [
-      transactions, higherCategory, usersExpenses, enums, user, userAccount
+      transactions,
+      higherCategory,
+      usersExpenses,
+      enums,
+      user,
+      userAccount,
+      invites,
     ] = await Promise.all([
-      fetchTransactions(),
-      fetchHigherCategory(),
-      fetchUsersExpenses(),
-      fetchEnums(),
-      fetchCurrentUser(),
-      fetchUserAccount()
+      fetchTransactions(), // lista completa
+      fetchHigherCategory(), // agregação no backend
+      fetchUsersExpenses(), // agregação no backend
+      fetchEnums(), // meta-dados
+      fetchCurrentUser(), // { id, first_name, … }
+      fetchUserAccount(), // { id, … }
+      fetchInvitesPending(), // [{id,…}]
     ]);
 
+
+    /* ---- cálculos no front ---- */
     const total = transactions
       .filter((t) => t.notes !== "Salário mensal")
       .reduce((sum, t) => sum + Number(t.amount), 0);
@@ -44,17 +55,20 @@ export function useMainFetch() {
 
     setSummary({
       enums,
+      user,
+      userAccount,
       last: transactions.filter((t) => t.notes !== "Salário mensal"),
       totalMonth: total,
-      user,
       higherBank,
       higherCategory,
       usersExpenses,
-      userAccount,
+      invites
     });
   }, []);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
-  return {summary, refetch: loadData};
+  return { summary, refetch: loadData };
 }

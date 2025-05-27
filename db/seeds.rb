@@ -1,13 +1,13 @@
 # Limpa o banco de dados e remove os dados de teste
 Transaction.destroy_all
-# Account.destroy_all
-# User.destroy_all
-# Family.destroy_all
+Account.destroy_all
+User.destroy_all
+Family.destroy_all
 
 # # 1) Família e Usuários
 user1  = User.create!(email: "luiz@example.com", first_name: "Luiz", last_name: "Andrade", password: "12345678")
-user1 = User.find_by(email: "luiz@example.com")
-# user2  = User.create!(email: "cecilia@example.com", first_name: "Cecilia", last_name: "Andrade", password: "12345678")
+# user1 = User.find_by(email: "luiz@example.com")
+user2  = User.create!(email: "cecilia@example.com", first_name: "Cecilia", last_name: "Andrade", password: "12345678")
 
 # 2) Transações
 today = Date.current
