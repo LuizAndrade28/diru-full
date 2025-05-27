@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_26_175740) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_26_215500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,10 +42,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_175740) do
   end
 
   create_table "families", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_families_on_name"
+  end
+
+  create_table "invites", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "token", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "invited_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invited_by_id"], name: "index_invites_on_invited_by_id"
+    t.index ["token"], name: "index_invites_on_token", unique: true
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -91,6 +100,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_175740) do
 
   add_foreign_key "accounts", "users"
   add_foreign_key "bills", "accounts"
+  add_foreign_key "invites", "users", column: "invited_by_id"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "bills"
   add_foreign_key "transactions", "transactions", column: "original_id"
