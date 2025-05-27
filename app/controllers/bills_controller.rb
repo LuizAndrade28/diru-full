@@ -1,17 +1,8 @@
 class BillsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_bill, only: %i[show edit update destroy generate_transaction]
+  before_action :set_bill, only: %i[edit update destroy generate_transaction]
 
   respond_to :html, :json
-
-  def index
-    @bills = current_user.family.accounts.flat_map(&:bills)
-    respond_with(@bills)
-  end
-
-  def show
-    respond_with(@bill)
-  end
 
   def new
     @bill = Bill.new
