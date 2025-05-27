@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getCSRFToken } from "../../src/utils/csrf";
 import { useTranslation } from "react-i18next";
+import { api } from "../../src/utils/apiPath"
 
 export default function TransactionForm({ account, enums, onSuccess }) {
   const { t } = useTranslation();
@@ -29,7 +30,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
     setSubmitting(true);
     setError(null);
     try {
-      const res = await fetch("/transactions", {
+      const res = await fetch(api("/transactions"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

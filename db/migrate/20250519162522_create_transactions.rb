@@ -10,7 +10,6 @@ class CreateTransactions < ActiveRecord::Migration[8.0]
       t.references :original, foreign_key: { to_table: :transactions }
       t.references :account, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
-      t.references :category, foreign_key: true
       t.references :bill, foreign_key: true
 
       t.timestamps

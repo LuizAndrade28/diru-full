@@ -1,0 +1,75 @@
+<div class="row justify-content-center my-4">
+  <div class="col-md-4 bg-white p-5 mt-5 rounded-4 shadow">
+    <h2 class="text-center mb-4 userw-title-text">Cadastrar</h2>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <% if resource.errors.any? %>
+        <div id="error_explanation" class="alert alert-danger">
+          <h2><%= I18n.t("errors.messages.not_saved",
+                        count: resource.errors.count,
+                        resource: resource.class.model_name.human.downcase) %></h2>
+          <ul>
+            <% resource.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-inputs">
+        <div class="mb-3">
+          <%= f.label :first_name, "Nome", class: "form-label" %>
+          <%= f.text_field :first_name,
+                            class: "form-control",
+                            required: true,
+                            autofocus: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :last_name, "Sobrenome", class: "form-label" %>
+          <%= f.text_field :last_name,
+                            class: "form-control",
+                            required: true,
+                            autofocus: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :email, "E-mail", class: "form-label" %>
+          <%= f.email_field :email,
+                            class: "form-control",
+                            required: true,
+                            autofocus: true,
+                            autocomplete: "email" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, "Senha", class: "form-label" %>
+          <%= f.password_field :password,
+                                class: "form-control",
+                                required: true,
+                                autocomplete: "new-password" %>
+          <% if @minimum_password_length %>
+            <div class="form-text text-muted">
+              Mínimo de <%= @minimum_password_length %> caracteres
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password_confirmation, "Confirmação senha", class: "form-label" %>
+          <%= f.password_field :password_confirmation,
+                                class: "form-control",
+                                required: true,
+                                autocomplete: "new-password" %>
+        </div>
+      </div>
+
+      <div class="form-actions d-flex">
+        <%= f.submit "Confirmar cadastro",
+                      class: 'btn btn-outline-warning mb-1 rounded-3 shadow-sm flex-grow-1 btn btn-outline-warning my-2 mb-4 me-3 w-100' %>
+        <%= render "devise/shared/links" %>
+      </div>
+    <% end %>
+
+  </div>
+</div>

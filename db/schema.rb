@@ -34,13 +34,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_215500) do
     t.index ["next_due_date"], name: "index_bills_on_next_due_date"
   end
 
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_categories_on_name"
-  end
-
   create_table "families", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

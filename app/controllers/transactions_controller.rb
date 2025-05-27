@@ -1,8 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_transaction, only: %i[show edit update destroy]
-
-  require 'irb'
+  before_action :set_transaction, only: %i[edit update destroy]
 
   respond_to :html, :json
 
@@ -38,12 +36,8 @@ class TransactionsController < ApplicationController
         user_id: user&.id
       }
     end
-    # binding.irb
-    render json: result
-  end
 
-  def show
-    respond_with(@transaction)
+    render json: result
   end
 
   def new
