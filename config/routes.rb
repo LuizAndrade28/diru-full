@@ -6,26 +6,29 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  get "/me", to: "users#me"
-  get "/account", to: "users#account"
-  get "meta/enums", to: "meta#enums"
+  # ----  API v1  ---- #
+  scope path: "api/v1" do
+    get  "/me",        to: "users#me"
+    get  "/account",   to: "users#account"
+    get  "meta/enums", to: "meta#enums"
 
-  resources :accounts
-  resources :transactions do
-    collection do
-      get :higher_category
-      get :users_expenses
+    resources :transactions do
+      collection do
+        get :higher_category
+        get :users_expenses
+      end
     end
-  end
-  resources :bills do
-    post :generate_transaction, on: :member
-  end
 
-  resources :invites, only: [:create] do
-    collection { get :pending }
-    member do
-      post :accept
-      post :decline
+    resources :bills do
+      post :generate_transaction, on: :member
+    end
+
+    resources :invites, only: [:create] do
+      collection { get :pending }
+      member do
+        post :accept
+        post :decline
+      end
     end
   end
 end
