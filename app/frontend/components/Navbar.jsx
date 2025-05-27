@@ -26,6 +26,24 @@ export default function Navbar() {
         <a className="btn btn-outline-secondary" href="/users/edit">
           Minha conta
         </a>
+
+        <button
+          className="btn btn-outline-secondary"
+          onClick={async () => {
+            await fetch("/users/sign_out", {
+              method: "DELETE",
+              credentials: "include",
+              headers: {
+                "X-CSRF-Token": document.querySelector(
+                  'meta[name="csrf-token"]'
+                ).content,
+              },
+            });
+            window.location.href = "/"; // ou redirecione como preferir
+          }}
+        >
+          Sair
+        </button>
       </div>
     </nav>
   );
