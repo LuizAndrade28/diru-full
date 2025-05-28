@@ -3,7 +3,8 @@ import { getCSRFToken } from "../src/utils/csrf";
 import { useTranslation } from "react-i18next";
 import { api } from "../src/utils/apiPath"
 
-export default function InvitesInbox({ invites, onRespond }) {
+
+export default function InvitesInbox({ invites, onRespond , user}) {
   const { t } = useTranslation();
   const [email, setEmail]   = useState("");
   const [sending, setSending] = useState(false);
@@ -27,12 +28,12 @@ export default function InvitesInbox({ invites, onRespond }) {
         body: JSON.stringify({ invite: { email } }),
       });
       if (!r.ok) throw await r.json();
-      setEmail("");
-      onRespond();            // recarrega convites  resumo
+        setEmail("");
+        onRespond();            // recarrega convites  resumo
     } catch (e) {
-      setErr(e.errors?.join(", ") || e.message);
+        setErr(e.errors?.join(", ") || e.message);
     } finally {
-      setSending(false);
+        setSending(false);
     }
   }
 
@@ -79,27 +80,58 @@ export default function InvitesInbox({ invites, onRespond }) {
               key={inv.id}
               className="list-group-item d-flex justify-content-between"
             >
-              {inv.email} {" — "}{" "}
-              <small className="text-muted">
-                {t("invites.from")} {inv.invited_by.first_name}{" "}
-                {" (" + inv.invited_by.email + ")"}{" "}
-              </small>
-              <span>
-                <button
-                  className="btn btn-sm btn-success me-2"
-                  onClick={() => post(api(`/invites/${inv.id}/accept`))}
-                >
-                  Aceitar
-                  {t("invites.accept")}
-                </button>
-                <button
-                  className="btn btn-sm btn-outline-secondary"
-                  onClick={() => post(api(`/invites/${inv.id}/decline`))}
-                >
-                  Recusar
-                  {t("invites.decline")}
-                </button>
-              </span>
+              {user.email !== inv.invited_by.email ? (
+                <>
+                  <h5>{t("invites.received")}</h5>
+                  {inv.email} {" — "}{" "}
+                  <small className="text-muted">
+                    {t("invites.from")} {inv.invited_by.first_name}{" "}
+                    {" (" + inv.invited_by.email + ")"}{" "}
+                  </small>
+                  <span>
+                    <button
+                      className="btn btn-sm btn-success me-2"
+                      onClick={() => post(api(`/invites/${inv.id}/accept`))}
+                    >
+                      {t("invites.accept")}
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => post(api(`/invites/${inv.id}/decline`))}
+                    >
+                      {t("invites.decline")}
+                    </button>
+                  </span>
+                </>
+              ) : (
+                <>
+                  <h5>{t("invites.sent")}</h5>
+                  {inv.email} {" — "}{" "}
+                  <small className="text-muted">
+                    {t("invites.from")} {inv.invited_by.first_name}{" "}
+                    {" (" + inv.invited_by.email + ")"}{" "}
+                  </small>
+                  <span>
+                    <button
+                      className="btn btn-sm btn-danger me-2"
+                      onClick={async () => {
+                        await fetch(api(`/invites/${inv.id}`), {
+                          method: "DELETE",
+                          credentials: "include",
+                          headers: {
+                            "X-CSRF-Token": document.querySelector(
+                              'meta[name="csrf-token"]'
+                            ).content,
+                          },
+                        });
+                        onRespond();
+                      }}
+                    >
+                      {t("invites.delete")}
+                    </button>
+                  </span>
+                </>
+              )}
             </li>
           ))}
         </ul>
