@@ -18,12 +18,16 @@ class User < ApplicationRecord
   def ensure_family!
     return if family.present?
 
-    create_family!
+    create_family_record!
+  end
+
+  def create_family_record!
+    update!(family: Family.create!)
   end
 
   private
 
-  # Callback 2: cria a conta padrão
+  # Callback 1: cria a conta do usuário
   def create_default_account
     create_account!
   end
