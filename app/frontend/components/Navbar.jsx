@@ -1,8 +1,9 @@
-// app/frontend/components/Navbar.jsx
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({user}) {
+  if (!user || user === false) return null;
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light px-3">
       <Link className="navbar-brand" to="/">

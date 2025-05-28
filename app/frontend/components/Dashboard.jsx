@@ -4,6 +4,7 @@ import "../src/styles/dashboard.scss";
 import { useMainFetch } from "../src/hooks/useMainFetch";
 import TransactionForm from "./forms/TransactionForm";
 import InvitesInbox from "../components/InvitesInbox";
+import Spinner from "../components/Spinner";
 
 import { formatDatePtBR } from "../src/utils/formatters";
 import { useTranslation } from "react-i18next";
@@ -14,7 +15,7 @@ export default function Dashboard() {
   const [tab, setTab] = useState("resume");
 
   /* enquanto não chegou → mostre loading  */
-  if (!summary) return <p>Carregando…</p>;
+  if (!summary) return <Spinner />;
 
   const money = (amount) =>
     new Intl.NumberFormat("pt-BR", {
