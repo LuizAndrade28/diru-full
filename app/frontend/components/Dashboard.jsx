@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../src/styles/dashboard.scss";
 
 import { useMainFetch } from "../src/hooks/useMainFetch";
+
 import TransactionForm from "./forms/TransactionForm";
 import InvitesInbox from "../components/InvitesInbox";
 import Spinner from "../components/Spinner";
@@ -9,7 +10,7 @@ import Spinner from "../components/Spinner";
 import { formatDatePtBR } from "../src/utils/formatters";
 import { useTranslation } from "react-i18next";
 
-export default function Dashboard() {
+export default function Dashboard({user}) {
   const { summary, refetch } = useMainFetch();
   const { t } = useTranslation();
   const [tab, setTab] = useState("resume");
@@ -94,7 +95,11 @@ export default function Dashboard() {
       )}
 
       {tab === "invites" && (
-        <InvitesInbox invites={summary.invites} onRespond={refetch} />
+        <InvitesInbox
+          invites={summary.invites}
+          user={user}
+          onRespond={refetch}
+        />
       )}
     </div>
   );

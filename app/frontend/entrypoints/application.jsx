@@ -26,7 +26,7 @@ function App() {
     <BrowserRouter>
       <Navbar user={user} />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard user={user} />} />
 
         {/* <Route path="/gastos" element={<ExpensesIndex />} />
           <Route path="/resumos" element={<MonthlyReport />} /> */}

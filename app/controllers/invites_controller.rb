@@ -6,7 +6,10 @@ class InvitesController < ApplicationController
     current_user.ensure_family!
     invite = current_user.invites.new(invite_params)
 
-    if !invite.check_if_invited_by(invite.email) && invite.save
+    user = User.find_by(email: invite.email)
+    return render json: { errors: invite.errors.full_messages }, status: :unprocessable_entity if !invite.check_if_invited_by(invite.email) || (user && (user.family == current_user.family || user.family != nil))
+
+    if invite.save
       render json: invite, status: :created
     else
       render json: { errors: invite.errors.full_messages }, status: :unprocessable_entity
@@ -18,6 +21,7 @@ class InvitesController < ApplicationController
     invites = Invite
                 .pending
                 .where(email: current_user.email)
+                .or(Invite.pending.where(invited_by: current_user))
                 .includes(:invited_by)
 
     render json: invites.as_json(
@@ -38,6 +42,15 @@ class InvitesController < ApplicationController
     invite = Invite.pending.find(params[:id])
     invite.decline!
     head :no_content
+  end
+
+  def destroy
+    invite = Invite.find(params[:id])
+    if invite.destroy
+      head :no_content
+    else
+      render json: { errors: invite.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   private

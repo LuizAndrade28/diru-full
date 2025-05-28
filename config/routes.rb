@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       post :generate_transaction, on: :member
     end
 
-    resources :invites, only: [:create] do
+    resources :invites, only: [:destroy, :create] do
       collection { get :pending }
       member do
         post :accept
