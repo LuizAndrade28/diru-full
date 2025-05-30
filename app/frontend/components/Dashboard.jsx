@@ -10,7 +10,7 @@ import Spinner from "../components/Spinner";
 import { formatDatePtBR } from "../src/utils/formatters";
 import { useTranslation } from "react-i18next";
 
-export default function Dashboard({user}) {
+export default function Dashboard({ user }) {
   const { summary, refetch } = useMainFetch();
   const { t } = useTranslation();
   const [tab, setTab] = useState("resume");
@@ -73,13 +73,11 @@ export default function Dashboard({user}) {
             {t(`categories.${summary.higherCategory.category}`)} -
             {money(summary.higherCategory.total)}
           </p>
-
           {summary.usersExpenses.map((expense) => (
             <p key={expense.user_id || expense.owner}>
               {expense.owner}: {money(expense.total)}
             </p>
           ))}
-
           <h2 className="mt-4">{t("dashboard.last_transactions")}</h2>
           <ul>
             {summary.last.map((transaction) => (
