@@ -3,12 +3,19 @@ import { getCSRFToken } from "../src/utils/csrf";
 import { useTranslation } from "react-i18next";
 import { api } from "../src/utils/apiPath"
 
+import { useUserFamily } from "../src/hooks/auth";
 
-export default function InvitesInbox({ invites, onRespond , user}) {
+
+export default function InvitesInbox({ invites, onRespond , user }) {
   const { t } = useTranslation();
   const [email, setEmail]   = useState("");
   const [sending, setSending] = useState(false);
   const [err, setErr]         = useState(null);
+  let family;
+
+  if (user && user.family_id != null) {
+    family = useUserFamily();
+  }
 
   /* ---- envia novo convite ---------------------------------------- */
   async function sendInvite(e) {
@@ -70,6 +77,43 @@ export default function InvitesInbox({ invites, onRespond , user}) {
       </form>
 
       {err && <div className="alert alert-danger">{err}</div>}
+
+      {family && family.length >= 1 && (
+        <div>
+          <h3>Membros da Família</h3>
+          <div className="d-flex gap-2">
+            <p>Sair da família?</p>
+            <button
+              className="btn btn-sm btn-danger me-2"
+              onClick={async () => {
+                if (
+                  window.confirm(
+                    "Tem certeza que deseja sair da família? Esta ação não pode ser desfeita."
+                  )
+                ) {
+                  await fetch(api(`/families/${user.family_id}`), {
+                    method: "DELETE",
+                    credentials: "include",
+                    headers: {
+                      "X-CSRF-Token": document.querySelector(
+                        'meta[name="csrf-token"]'
+                      ).content,
+                    },
+                  });
+                  onRespond();
+                }
+              }}
+            >
+              {t("invites.delete")}
+            </button>
+          </div>
+          <ul>
+            {family.map((user) => (
+              <li key={user.email}>{user.first_name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {invites.length === 0 ? (
         <p className="text-muted">{t("invites.none")}</p>
