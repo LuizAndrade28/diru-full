@@ -10,7 +10,8 @@ Rails.application.routes.draw do
   scope path: "api/v1" do
     get  "/me",        to: "users#me"
     get  "/account",   to: "users#account"
-    get  "meta/enums", to: "meta#enums"
+    get  "/meta/enums", to: "meta#enums"
+    get "/family_members", to: "families#family_members"
 
     resources :transactions do
       collection do
@@ -18,6 +19,8 @@ Rails.application.routes.draw do
         get :users_expenses
       end
     end
+
+    resources :families, only: [:destroy]
 
     resources :bills do
       post :generate_transaction, on: :member

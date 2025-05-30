@@ -29,3 +29,26 @@ export function useCurrentUser() {
 
   return user; // undefined | false | {…}
 }
+
+export function useUserFamily() {
+  const [userFamily, setUserFamily] = useState([]);
+
+  useEffect(() => {
+    fetch(api("/family_members"), {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Request failed");
+
+        const data = await response.json();
+        setUserFamily(data);
+      })
+      .catch((error) => {
+        // console.error(error);
+        setUserFamily(false);
+      });
+  }, []);
+
+  return userFamily;
+}
