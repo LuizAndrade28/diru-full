@@ -31,31 +31,6 @@ export default function Dashboard({ user }) {
 
   return (
     <div className="container mt-4">
-      {/* Inputs para escolher as datas */}
-      <label>
-        Data de início:
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-      </label>
-
-      <label style={{ marginLeft: "1rem" }}>
-        Data de fim:
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-      </label>
-
-      {/*
-        Caso queira forçar manualmente a busca (por exemplo, um botão "Filtrar"),
-        você pode chamar `refetch()` aqui. Exemplo:
-      */}
-      {/* <button onClick={() => refetch()}>Filtrar</button> */}
-
       {/* --------- NAV TABS ---------- */}
       <ul className="nav nav-tabs mb-4">
         <li className="nav-item">
@@ -80,17 +55,54 @@ export default function Dashboard({ user }) {
             )}
           </button>
         </li>
+
+        <li className="nav-item">
+          <button
+            className={`nav-link ${tab === "form" ? "active" : ""}`}
+            onClick={() => setTab("form")}
+          >
+            {t("dashboard.form")}
+          </button>
+        </li>
       </ul>
 
       {/* --------- PÁGINAS ---------- */}
+      {tab === "form" && (
+        <TransactionForm
+          account={summary.userAccount.id}
+          enums={summary.enums}
+          onSuccess={refetch}
+        />
+      )}
+
       {tab === "resume" && (
         <>
-          <TransactionForm
-            account={summary.userAccount.id}
-            enums={summary.enums}
-            onSuccess={refetch}
-          />
+          {/* Inputs para escolher as datas */}
+          <div className="d-flex justify-content-end">
+            <label>
+              Data de início:
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </label>
 
+            <label style={{ marginLeft: "1rem" }}>
+              Data de fim:
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </label>
+          </div>
+
+          {/*
+            Caso queira forçar manualmente a busca (por exemplo, um botão "Filtrar"),
+            você pode chamar `refetch()` aqui. Exemplo:
+          */}
+          {/* <button onClick={() => refetch()}>Filtrar</button> */}
           <h1>Resumo do mês</h1>
           <h2>Olá, {summary.user.first_name}</h2>
           <p>Total de despesas: R$ {summary.totalMonth}</p>
