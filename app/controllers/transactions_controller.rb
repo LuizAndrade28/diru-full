@@ -41,7 +41,6 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = current_user.transactions.build(transaction_params)
-    binding.irb
 
     @transaction.owner = @transaction.owner.strip.capitalize if @transaction.owner.present?
     if @transaction.save
@@ -75,7 +74,9 @@ class TransactionsController < ApplicationController
   def set_scope
     start_date = params[:start].presence || Date.current.beginning_of_month
     end_date = params[:end].presence || Date.current.end_of_month
-    @scope = current_user.transactions.where(happened_at: start_date..end_date)
+    family_user_ids = current_user.family.users.where.not(id: current_user.id).pluck(:id)
+    @scope = Transaction.where(user_id: [ current_user.id ] + family_user_ids)
+              .where(happened_at: start_date..end_date)
     @scope = @scope.where(happened_at: params[:start]..params[:end]) \
                     if params[:start].present? && params[:end].present?
   end
