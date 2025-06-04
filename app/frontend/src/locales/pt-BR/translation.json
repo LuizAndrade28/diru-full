@@ -42,8 +42,9 @@
     "category": "Categoria",
     "bank": "Banco",
     "type": {
-      "income": "Receita",
-      "expense": "Despesa"
+      "income": "Entrada",
+      "expense": "Despesa",
+      "reversal": "Estorno"
     },
     "owner": "Dono",
     "notes": "Observações",
