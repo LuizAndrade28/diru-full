@@ -8,7 +8,7 @@ import { fetchCurrentUser } from "./fetchCurrentUser";
 import { fetchUserAccount } from "./fetchUserAccount";
 import { fetchInvitesPending } from "./fetchInvitesPending";
 
-export function useMainFetch() {
+export function useMainFetch(startDate, endDate) {
   const [summary, setSummary] = useState(null);
 
   const loadData = useCallback(async () => {
@@ -21,15 +21,14 @@ export function useMainFetch() {
       userAccount,
       invites,
     ] = await Promise.all([
-      fetchTransactions(), // lista completa
-      fetchHigherCategory(), // agregação no backend
-      fetchUsersExpenses(), // agregação no backend
+      fetchTransactions(startDate, endDate), // lista completa
+      fetchHigherCategory(startDate, endDate), // agregação no backend
+      fetchUsersExpenses(startDate, endDate), // agregação no backend
       fetchEnums(), // meta-dados
       fetchCurrentUser(), // { id, first_name, … }
       fetchUserAccount(), // { id, … }
       fetchInvitesPending(), // [{id,…}]
     ]);
-
 
     /* ---- cálculos no front ---- */
     const total = transactions
@@ -62,9 +61,9 @@ export function useMainFetch() {
       higherBank,
       higherCategory,
       usersExpenses,
-      invites
+      invites,
     });
-  }, []);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     loadData();

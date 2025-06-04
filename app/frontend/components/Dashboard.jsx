@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../src/styles/dashboard.scss";
 
 import { useMainFetch } from "../src/hooks/useMainFetch";
@@ -11,7 +11,10 @@ import { formatDatePtBR } from "../src/utils/formatters";
 import { useTranslation } from "react-i18next";
 
 export default function Dashboard({ user }) {
-  const { summary, refetch } = useMainFetch();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const { summary, refetch } = useMainFetch(startDate, endDate);
   const { t } = useTranslation();
   const [tab, setTab] = useState("resume");
 
@@ -24,8 +27,35 @@ export default function Dashboard({ user }) {
       currency: "BRL",
     }).format(amount);
 
+  const { last: transactions } = summary;
+
   return (
     <div className="container mt-4">
+      {/* Inputs para escolher as datas */}
+      <label>
+        Data de início:
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+      </label>
+
+      <label style={{ marginLeft: "1rem" }}>
+        Data de fim:
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+      </label>
+
+      {/*
+        Caso queira forçar manualmente a busca (por exemplo, um botão "Filtrar"),
+        você pode chamar `refetch()` aqui. Exemplo:
+      */}
+      {/* <button onClick={() => refetch()}>Filtrar</button> */}
+
       {/* --------- NAV TABS ---------- */}
       <ul className="nav nav-tabs mb-4">
         <li className="nav-item">
