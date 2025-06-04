@@ -12,8 +12,10 @@ class FamiliesController < ApplicationController
   end
 
   def destroy
-    if @family.users.length <= 1
+    if @family.users.length == 1
       @family.destroy
+      current_user.family = nil
+      current_user.save!
     else
       exit_family
     end
