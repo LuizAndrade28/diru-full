@@ -3,19 +3,12 @@ import { getCSRFToken } from "../src/utils/csrf";
 import { useTranslation } from "react-i18next";
 import { api } from "../src/utils/apiPath"
 
-import { useUserFamily } from "../src/hooks/auth";
-
-
-export default function InvitesInbox({ invites, onRespond , user }) {
+export default function InvitesInbox({ family, invites, onRespond , user }) {
   const { t } = useTranslation();
   const [email, setEmail]   = useState("");
   const [sending, setSending] = useState(false);
   const [err, setErr]         = useState(null);
-  let family;
 
-  if (user && user.family_id != null) {
-    family = useUserFamily();
-  }
 
   /* ---- envia novo convite ---------------------------------------- */
   async function sendInvite(e) {

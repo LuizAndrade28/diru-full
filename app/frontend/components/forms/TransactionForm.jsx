@@ -3,7 +3,7 @@ import { getCSRFToken } from "../../src/utils/csrf";
 import { useTranslation } from "react-i18next";
 import { api } from "../../src/utils/apiPath"
 
-export default function TransactionForm({ account, enums, onSuccess }) {
+export default function TransactionForm({ family, account, enums, onSuccess }) {
   const { t } = useTranslation();
 
   if (!enums) return <p>Carregando opções…</p>;
@@ -20,6 +20,12 @@ export default function TransactionForm({ account, enums, onSuccess }) {
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  if (family) {
+    var sortedFamily = [...family].sort((a, b) =>
+      a.first_name.localeCompare(b.first_name, "pt-BR")
+    );
+  }
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -58,10 +64,12 @@ export default function TransactionForm({ account, enums, onSuccess }) {
   const isReversal = form.kind === "reversal";
   const isKind = !!form.kind;
 
+  // Helper to sort object keys alphabetically
+  const sortKeys = (obj) => Object.keys(obj).sort();
+
   return (
     <form onSubmit={handleSubmit} className="card card-body mb-4">
       <h4 className="mb-3">{t("transactions.new")}</h4>
-
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="col-sm-4">
@@ -74,7 +82,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
           required
         >
           <option value=""></option>
-          {Object.keys(enums.kinds).map((key) => (
+          {sortKeys(enums.kinds).map((key) => (
             <option key={key} value={key}>
               {t(`transactions.type.${key}`)}
             </option>
@@ -89,6 +97,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
             <input
               type="number"
               step="0.01"
+              min="0.00"
               name="amount"
               className="form-control"
               value={form.amount}
@@ -119,16 +128,25 @@ export default function TransactionForm({ account, enums, onSuccess }) {
               required
             />
           </div>
+          {console.log(family)}
           {isExpense && (
             <div className="col-sm-4">
               <label className="form-label">{t("transactions.owner")}</label>
-              <input
-                type="text"
+              <select
                 name="owner"
-                className="form-control"
+                className="form-select"
                 value={form.owner}
                 onChange={handleChange}
-              />
+                required
+              >
+              <option value=""></option>
+              {sortedFamily &&
+                sortedFamily.map((member) => (
+                  <option key={member.id} value={member.name}>
+                    {`${member.first_name}`}
+                  </option>
+              ))}
+              </select>
             </div>
           )}
 
@@ -140,6 +158,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
               <input
                 type="number"
                 name="installments"
+                min="0"
                 className="form-control"
                 value={form.installments}
                 onChange={handleChange}
@@ -161,7 +180,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
                   required
                 >
                   <option value=""></option>
-                  {Object.keys(enums.categories).map((key) => (
+                  {sortKeys(enums.categories).map((key) => (
                     <option key={key} value={key}>
                       {t(`categories.${key}`)}
                     </option>
@@ -181,7 +200,7 @@ export default function TransactionForm({ account, enums, onSuccess }) {
               required
             >
               <option value=""></option>
-              {Object.keys(enums.bank_names).map((key) => (
+              {sortKeys(enums.bank_names).map((key) => (
                 <option key={key} value={key}>
                   {key
                     .replace(/_/g, " ")

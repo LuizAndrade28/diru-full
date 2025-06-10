@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../src/styles/dashboard.scss";
 
 import { useMainFetch } from "../src/hooks/useMainFetch";
+import { useUserFamily } from "../src/hooks/auth";
 
 import TransactionForm from "./forms/TransactionForm";
 import InvitesInbox from "../components/InvitesInbox";
@@ -17,6 +18,12 @@ export default function Dashboard({ user }) {
   const { summary, refetch } = useMainFetch(startDate, endDate);
   const { t } = useTranslation();
   const [tab, setTab] = useState("resume");
+
+  let family;
+
+  if (user && user.family_id != null) {
+    family = useUserFamily();
+  }
 
   /* enquanto não chegou → mostre loading  */
   if (!summary) return <Spinner />;
@@ -72,6 +79,7 @@ export default function Dashboard({ user }) {
           account={summary.userAccount.id}
           enums={summary.enums}
           onSuccess={refetch}
+          family={family}
         />
       )}
 
@@ -139,6 +147,7 @@ export default function Dashboard({ user }) {
           invites={summary.invites}
           user={user}
           onRespond={refetch}
+          family={family}
         />
       )}
     </div>
