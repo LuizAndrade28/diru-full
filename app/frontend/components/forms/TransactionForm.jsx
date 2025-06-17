@@ -60,7 +60,6 @@ export default function TransactionForm({ family, account, enums, onSuccess }) {
   }
 
   const isExpense = form.kind === "expense";
-  // const isIncome = form.kind === "income";
   const isReversal = form.kind === "reversal";
   const isKind = !!form.kind;
 
@@ -139,13 +138,13 @@ export default function TransactionForm({ family, account, enums, onSuccess }) {
                 onChange={handleChange}
                 required
               >
-              <option value=""></option>
-              {sortedFamily &&
-                sortedFamily.map((member) => (
-                  <option key={member.id} value={member.name}>
-                    {`${member.first_name}`}
-                  </option>
-              ))}
+                <option value=""></option>
+                {sortedFamily &&
+                  sortedFamily.map((member) => (
+                    <option key={member.id} value={member.name}>
+                      {`${member.first_name}`}
+                    </option>
+                  ))}
               </select>
             </div>
           )}
@@ -157,7 +156,7 @@ export default function TransactionForm({ family, account, enums, onSuccess }) {
               </label>
               <input
                 type="number"
-                name="installments"
+                name="installments_qty"
                 min="0"
                 className="form-control"
                 value={form.installments}

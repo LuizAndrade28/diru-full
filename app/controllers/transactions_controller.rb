@@ -7,7 +7,8 @@ class TransactionsController < ApplicationController
 
   def index
     # scope = scope.where(kind: params[:kind])               if params[:kind].present?
-    @transactions = @scope.order(happened_at: :desc)
+    # binding.irb
+    @transactions = @scope.where(installments_qty: nil).order(happened_at: :desc)
     respond_with(@transactions)
   end
 

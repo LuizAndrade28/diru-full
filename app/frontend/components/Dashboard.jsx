@@ -132,10 +132,20 @@ export default function Dashboard({ user }) {
           <ul>
             {summary.last.map((transaction) => (
               <li key={transaction.id}>
+                {console.log(transaction)}
                 {transaction.notes} – {money(transaction.amount)} -{" "}
                 {transaction.bank_name} -{" "}
                 {t(`categories.${transaction.category}`)} -{" "}
-                {formatDatePtBR(transaction.happened_at)} - {transaction.owner}
+                {formatDatePtBR(transaction.happened_at)} - {transaction.owner}{" "}
+                -{" "}
+                {transaction.installment_number &&
+                  transaction.installment_total && (
+                    <>
+                      {" "}
+                      - Parcela {transaction.installment_number}/
+                      {transaction.installment_total}
+                    </>
+                  )}
               </li>
             ))}
           </ul>
