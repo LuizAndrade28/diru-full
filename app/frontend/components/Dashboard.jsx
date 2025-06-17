@@ -113,7 +113,9 @@ export default function Dashboard({ user }) {
           {/* <button onClick={() => refetch()}>Filtrar</button> */}
           <h1>Resumo do mês</h1>
           <h2>Olá, {summary.user.first_name}</h2>
-          <p>Total de despesas: R$ {summary.totalMonth}</p>
+          <p>
+            Total de despesas: R$ {money(summary.totalMonth)}
+          </p>
           <p>
             Banco com mais gastos: {summary.higherBank.bank_name} -
             {money(summary.higherBank.total)}
