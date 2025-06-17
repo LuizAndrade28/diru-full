@@ -43,9 +43,7 @@ class TransactionsController < ApplicationController
   def create
     @transaction = current_user.transactions.build(transaction_params)
 
-    if @transaction.owner.present?
-      @transaction.owner = @transaction.owner.strip.capitalize
-    else
+    if @transaction.owner.blank?
       @transaction.owner = current_user.first_name
     end
 

@@ -136,7 +136,6 @@ export default function TransactionForm({ family, account, enums, onSuccess }) {
                 className="form-select"
                 value={form.owner}
                 onChange={handleChange}
-                required
               >
                 <option value=""></option>
                 {sortedFamily &&
