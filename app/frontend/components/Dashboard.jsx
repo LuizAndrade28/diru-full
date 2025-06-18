@@ -54,7 +54,7 @@ export default function Dashboard({ user }) {
             className={`nav-link ${tab === "invites" ? "active" : ""}`}
             onClick={() => setTab("invites")}
           >
-            {t("dashboard.invites")}
+            {t("dashboard.family_and_invites")}
             {summary.invites.length > 0 && (
               <span className="badge bg-danger ms-1">
                 {summary.invites.length}
@@ -68,7 +68,7 @@ export default function Dashboard({ user }) {
             className={`nav-link ${tab === "form" ? "active" : ""}`}
             onClick={() => setTab("form")}
           >
-            {t("dashboard.form")}
+            {t("dashboard.add_transaction")}
           </button>
         </li>
       </ul>
@@ -113,11 +113,9 @@ export default function Dashboard({ user }) {
           {/* <button onClick={() => refetch()}>Filtrar</button> */}
           <h1>Resumo do mês</h1>
           <h2>Olá, {summary.user.first_name}</h2>
+          <p>Total de despesas: {money(summary.totalMonth)}</p>
           <p>
-            Total de despesas: R$ {money(summary.totalMonth)}
-          </p>
-          <p>
-            Banco com mais gastos: {summary.higherBank.bank_name} -
+            Banco com mais gastos: {t(`banks.${summary.higherBank.bank_name}`)} -
             {money(summary.higherBank.total)}
           </p>
           <p>
@@ -136,7 +134,7 @@ export default function Dashboard({ user }) {
               <li key={transaction.id}>
                 {console.log(transaction)}
                 {transaction.notes} – {money(transaction.amount)} -{" "}
-                {transaction.bank_name} -{" "}
+                {t(`banks.${transaction.bank_name}`)} -{" "}
                 {t(`categories.${transaction.category}`)} -{" "}
                 {formatDatePtBR(transaction.happened_at)} - {transaction.owner}{" "}
                 -{" "}
