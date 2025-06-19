@@ -127,7 +127,6 @@ export default function TransactionForm({ family, account, enums, onSuccess }) {
               required
             />
           </div>
-          {console.log(family)}
           {isExpense && (
             <div className="col-sm-4">
               <label className="form-label">{t("transactions.owner")}</label>

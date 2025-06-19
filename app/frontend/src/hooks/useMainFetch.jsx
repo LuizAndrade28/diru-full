@@ -13,7 +13,7 @@ export function useMainFetch(startDate, endDate) {
 
   const loadData = useCallback(async () => {
     const [
-      transactions,
+      { transactions, my_transactions },
       higherCategory,
       usersExpenses,
       enums,
@@ -21,7 +21,7 @@ export function useMainFetch(startDate, endDate) {
       userAccount,
       invites,
     ] = await Promise.all([
-      fetchTransactions(startDate, endDate), // lista completa
+      fetchTransactions(startDate, endDate), // Retorna { transactions, my_transactions }
       fetchHigherCategory(startDate, endDate), // agregação no backend
       fetchUsersExpenses(startDate, endDate), // agregação no backend
       fetchEnums(), // meta-dados
@@ -53,6 +53,7 @@ export function useMainFetch(startDate, endDate) {
       );
 
     setSummary({
+      my_transactions,
       enums,
       user,
       userAccount,

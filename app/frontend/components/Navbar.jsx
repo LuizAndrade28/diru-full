@@ -10,6 +10,8 @@ export default function Navbar({user}) {
         Diru
       </Link>
 
+    {/* LINKS ALTERNATIVOS - REPENSAR SE NECESSARIOS */}
+    {/*
       <div className="navbar-nav">
         <NavLink className="nav-link" to="/">
           Dashboard
@@ -21,6 +23,7 @@ export default function Navbar({user}) {
           Resumos
         </NavLink>
       </div>
+    */}
 
       <div className="ms-auto">
         {/* exemplo de link de perfil/sair */}

@@ -8,8 +8,15 @@ class TransactionsController < ApplicationController
   def index
     # scope = scope.where(kind: params[:kind])               if params[:kind].present?
     # binding.irb
-    @transactions = @scope.where(installments_qty: nil).order(happened_at: :desc)
-    respond_with(@transactions)
+    @transactions = @scope.where(installments_qty: nil).where.not(user: current_user).order(happened_at: :desc)
+    @my_transactions = @scope.where(installments_qty: nil, user: current_user).order(happened_at: :desc)
+
+    result = {
+      transactions: @transactions.as_json,
+      my_transactions: @my_transactions.as_json
+    }
+
+    render json: result
   end
 
   def higher_category

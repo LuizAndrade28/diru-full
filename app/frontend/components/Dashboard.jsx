@@ -74,6 +74,15 @@ export default function Dashboard({ user }) {
       </ul>
 
       {/* --------- PÁGINAS ---------- */}
+      {tab === "invites" && (
+        <InvitesInbox
+          invites={summary.invites}
+          user={user}
+          onRespond={refetch}
+          family={family}
+        />
+      )}
+
       {tab === "form" && (
         <TransactionForm
           account={summary.userAccount.id}
@@ -115,8 +124,8 @@ export default function Dashboard({ user }) {
           <h2>Olá, {summary.user.first_name}</h2>
           <p>Total de despesas: {money(summary.totalMonth)}</p>
           <p>
-            Banco com mais gastos: {t(`banks.${summary.higherBank.bank_name}`)} -
-            {money(summary.higherBank.total)}
+            Banco com mais gastos: {t(`banks.${summary.higherBank.bank_name}`)}{" "}
+            -{money(summary.higherBank.total)}
           </p>
           <p>
             Categoria com mais gastos:{" "}
@@ -128,37 +137,53 @@ export default function Dashboard({ user }) {
               {expense.owner}: {money(expense.total)}
             </p>
           ))}
-          <h2 className="mt-4">{t("dashboard.last_transactions")}</h2>
-          <ul>
-            {summary.last.map((transaction) => (
-              <li key={transaction.id}>
-                {console.log(transaction)}
-                {transaction.notes} – {money(transaction.amount)} -{" "}
-                {t(`banks.${transaction.bank_name}`)} -{" "}
-                {t(`categories.${transaction.category}`)} -{" "}
-                {formatDatePtBR(transaction.happened_at)} - {transaction.owner}{" "}
-                -{" "}
-                {transaction.installment_number &&
-                  transaction.installment_total && (
-                    <>
-                      {" "}
-                      - Parcela {transaction.installment_number}/
-                      {transaction.installment_total}
-                    </>
-                  )}
-              </li>
-            ))}
-          </ul>
+          <div className="d-flex gap-2 mt-3">
+            <div className="w-50 border p-3">
+              <h2 className="mt-4">Minhas Transações</h2>
+              <ul>
+                {summary.my_transactions.map((my_transaction) => (
+                  <li key={my_transaction.id}>
+                    {my_transaction.notes} – {money(my_transaction.amount)} -{" "}
+                    {t(`banks.${my_transaction.bank_name}`)} -{" "}
+                    {t(`categories.${my_transaction.category}`)} -{" "}
+                    {formatDatePtBR(my_transaction.happened_at)} -{" "}
+                    {my_transaction.owner} -{" "}
+                    {my_transaction.installment_number &&
+                      my_transaction.installment_total && (
+                        <>
+                          {" "}
+                          - Parcela {my_transaction.installment_number}/
+                          {my_transaction.installment_total}
+                        </>
+                      )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="w-50 border p-3">
+              <h2 className="mt-4">Transações da Família</h2>
+              <ul>
+                {summary.last.map((transaction) => (
+                  <li key={transaction.id}>
+                    {transaction.notes} – {money(transaction.amount)} -{" "}
+                    {t(`banks.${transaction.bank_name}`)} -{" "}
+                    {t(`categories.${transaction.category}`)} -{" "}
+                    {formatDatePtBR(transaction.happened_at)} -{" "}
+                    {transaction.owner} -{" "}
+                    {transaction.installment_number &&
+                      transaction.installment_total && (
+                        <>
+                          {" "}
+                          - Parcela {transaction.installment_number}/
+                          {transaction.installment_total}
+                        </>
+                      )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </>
-      )}
-
-      {tab === "invites" && (
-        <InvitesInbox
-          invites={summary.invites}
-          user={user}
-          onRespond={refetch}
-          family={family}
-        />
       )}
     </div>
   );
