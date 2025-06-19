@@ -5,6 +5,7 @@ import { useMainFetch } from "../src/hooks/useMainFetch";
 import { useUserFamily } from "../src/hooks/auth";
 
 import TransactionForm from "./forms/TransactionForm";
+import BillForm from "./forms/BillForm";
 import InvitesInbox from "../components/InvitesInbox";
 import Spinner from "../components/Spinner";
 
@@ -71,6 +72,15 @@ export default function Dashboard({ user }) {
             {t("dashboard.add_transaction")}
           </button>
         </li>
+
+        <li className="nav-item">
+          <button
+            className={`nav-link ${tab === "bills" ? "active" : ""}`}
+            onClick={() => setTab("bills")}
+          >
+            Adicionar conta
+          </button>
+        </li>
       </ul>
 
       {/* --------- PÁGINAS ---------- */}
@@ -89,6 +99,14 @@ export default function Dashboard({ user }) {
           enums={summary.enums}
           onSuccess={refetch}
           family={family}
+        />
+      )}
+
+      {tab === "bills" && (
+        <BillForm
+          account={summary.userAccount.id}
+          enums={summary.billEnums}
+          onSuccess={refetch}
         />
       )}
 

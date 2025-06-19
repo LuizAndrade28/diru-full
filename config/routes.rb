@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get  "/me",        to: "users#me"
     get  "/account",   to: "users#account"
     get  "/meta/enums", to: "meta#enums"
+    get  "/meta/bill_enums", to: "meta#bill_enums"
     get "/family_members", to: "families#family_members"
 
     resources :transactions do

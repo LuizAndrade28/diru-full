@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { fetchTransactions } from "./fetchTransactions";
 import { fetchHigherCategory } from "./fetchHigherCategory";
 import { fetchUsersExpenses } from "./fetchUsersExpenses";
+import { fetchBillEnums } from "./fetchBillEnums";
 import { fetchEnums } from "./fetchEnums";
 import { fetchCurrentUser } from "./fetchCurrentUser";
 import { fetchUserAccount } from "./fetchUserAccount";
@@ -16,6 +17,7 @@ export function useMainFetch(startDate, endDate) {
       { transactions, my_transactions },
       higherCategory,
       usersExpenses,
+      billEnums,
       enums,
       user,
       userAccount,
@@ -24,6 +26,7 @@ export function useMainFetch(startDate, endDate) {
       fetchTransactions(startDate, endDate), // Retorna { transactions, my_transactions }
       fetchHigherCategory(startDate, endDate), // agregação no backend
       fetchUsersExpenses(startDate, endDate), // agregação no backend
+      fetchBillEnums(), // meta-dados
       fetchEnums(), // meta-dados
       fetchCurrentUser(), // { id, first_name, … }
       fetchUserAccount(), // { id, … }
@@ -54,6 +57,7 @@ export function useMainFetch(startDate, endDate) {
 
     setSummary({
       my_transactions,
+      billEnums,
       enums,
       user,
       userAccount,
