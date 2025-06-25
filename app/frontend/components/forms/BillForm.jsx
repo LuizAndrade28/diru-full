@@ -58,11 +58,11 @@ export default function BillForm({ account, enums, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="card card-body mb-4">
-      <h4 className="mb-3">{t("bills.new")}</h4>
+      <h4 className="mb-3">{t("form.bills.new")}</h4>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="col-sm-4">
-        <label className="form-label">{t("bills.amount")}</label>
+        <label className="form-label">{t("form.bills.amount")}</label>
         <input
           type="number"
           step="0.01"
@@ -76,7 +76,7 @@ export default function BillForm({ account, enums, onSuccess }) {
       </div>
 
       <div className="col-sm-8">
-        <label className="form-label">{t("bills.description")}</label>
+        <label className="form-label">{t("form.bills.description")}</label>
         <input
           type="text"
           name="description"
@@ -87,7 +87,7 @@ export default function BillForm({ account, enums, onSuccess }) {
       </div>
 
       <div className="col-sm-4">
-        <label className="form-label">{t("bills.frequency")}</label>
+        <label className="form-label">{t("form.bills.frequency")}</label>
         <select
           name="frequency"
           className="form-select"
@@ -95,15 +95,15 @@ export default function BillForm({ account, enums, onSuccess }) {
           onChange={handleChange}
           required
         >
-          <option value="single">{t("bills.frequency.single")}</option>
-          <option value="weekly">{t("bills.frequency.weekly")}</option>
-          <option value="monthly">{t("bills.frequency.monthly")}</option>
-          <option value="yearly">{t("bills.frequency.yearly")}</option>
+          <option value="single">{t("form.bills.frequency_options.single")}</option>
+          <option value="weekly">{t("form.bills.frequency_options.weekly")}</option>
+          <option value="monthly">{t("form.bills.frequency_options.monthly")}</option>
+          <option value="yearly">{t("form.bills.frequency_options.yearly")}</option>
         </select>
       </div>
 
       <div className="col-sm-4">
-        <label className="form-label">{t("bills.next_due_date")}</label>
+        <label className="form-label">{t("form.bills.next_due_date")}</label>
         <input
           type="date"
           name="next_due_date"

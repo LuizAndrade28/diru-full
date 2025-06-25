@@ -138,21 +138,23 @@ export default function Dashboard({ user }) {
             você pode chamar `refetch()` aqui. Exemplo:
           */}
           {/* <button onClick={() => refetch()}>Filtrar</button> */}
+
           <h1>Resumo do mês</h1>
           <h2>Olá, {summary.user.first_name}</h2>
           <p>Total de despesas: {money(summary.totalMonth)}</p>
           <p>
             Banco com mais gastos: {t(`banks.${summary.higherBank.bank_name}`)}{" "}
-            -{money(summary.higherBank.total)}
+            - {money(summary.higherBank.total)}
           </p>
           <p>
             Categoria com mais gastos:{" "}
-            {t(`categories.${summary.higherCategory.category}`)} -
+            {t(`categories.${summary.higherCategory.category}`)} -{" "}
             {money(summary.higherCategory.total)}
           </p>
           {summary.usersExpenses.map((expense) => (
             <p key={expense.user_id || expense.owner}>
-              {expense.owner}: {money(expense.total)}
+              {expense.owner ? expense.owner : "Total contas mensais"}:{" "}
+              {money(expense.total)}
             </p>
           ))}
           <div className="d-flex gap-2 mt-3">
@@ -161,19 +163,30 @@ export default function Dashboard({ user }) {
               <ul>
                 {summary.my_transactions.map((my_transaction) => (
                   <li key={my_transaction.id}>
-                    {my_transaction.notes} – {money(my_transaction.amount)} -{" "}
-                    {t(`banks.${my_transaction.bank_name}`)} -{" "}
-                    {t(`categories.${my_transaction.category}`)} -{" "}
-                    {formatDatePtBR(my_transaction.happened_at)} -{" "}
-                    {my_transaction.owner} -{" "}
-                    {my_transaction.installment_number &&
-                      my_transaction.installment_total && (
-                        <>
-                          {" "}
-                          - Parcela {my_transaction.installment_number}/
-                          {my_transaction.installment_total}
-                        </>
-                      )}
+                    {my_transaction.bill_id === null ? (
+                      <>
+                        {my_transaction.notes} – {money(my_transaction.amount)}{" "}
+                        - {t(`banks.${my_transaction.bank_name}`)} -{" "}
+                        {t(`categories.${my_transaction.category}`)} -{" "}
+                        {formatDatePtBR(my_transaction.happened_at)} -{" "}
+                        {my_transaction.owner} -{" "}
+                        {my_transaction.installment_number &&
+                          my_transaction.installment_total && (
+                            <>
+                              {" "}
+                              - Parcela {my_transaction.installment_number}/
+                              {my_transaction.installment_total}
+                            </>
+                          )}
+                      </>
+                    ) : (
+                      <>
+                        {/* Tratamento para transações com bill_id diferente de null */}
+                        Conta: {my_transaction.notes} -{" "}
+                        {money(my_transaction.amount)} -{" "}
+                        {formatDatePtBR(my_transaction.happened_at)}
+                      </>
+                    )}
                   </li>
                 ))}
               </ul>

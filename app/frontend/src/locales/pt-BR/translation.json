@@ -104,6 +104,19 @@
     "global": {
       "saving": "Salvando...",
       "save" : "Salvar"
+    },
+    "bills": {
+      "new": "Adicionar conta",
+      "amount": "Valor da conta",
+      "description": "Descrição",
+      "frequency": "Frequência",
+      "frequency_options": {
+        "single": "Única",
+        "weekly": "Semanal",
+        "monthly": "Mensal",
+        "yearly": "Anual"
+      },
+      "next_due_date": "Data de vencimento"
     }
   }
 }
