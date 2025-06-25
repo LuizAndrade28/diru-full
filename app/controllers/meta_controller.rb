@@ -8,4 +8,10 @@ class MetaController < ApplicationController
       kinds:        Transaction.kinds         # se precisar
     }
   end
+
+  def bill_enums
+    render json: {
+      frequencies: Bill.frequencies            # {"single"=>0, "weekly"=>1, "monthly"=>2, "yearly"=>3}
+    }
+  end
 end

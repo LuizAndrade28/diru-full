@@ -12,7 +12,7 @@ class User < ApplicationRecord
 
   validates :first_name, :last_name, presence: true
 
-  # 1) depois de criado, gera a conta padrão
+  before_validation :normalize_name
   after_create :create_default_account
 
   def ensure_family!
@@ -27,8 +27,12 @@ class User < ApplicationRecord
 
   private
 
-  # Callback 1: cria a conta do usuário
   def create_default_account
     create_account!
+  end
+
+  def normalize_name
+    self.first_name = first_name.strip.titleize if first_name.present?
+    self.last_name = last_name.strip.titleize if last_name.present?
   end
 end

@@ -9,14 +9,28 @@ class BillsController < ApplicationController
   end
 
   def create
-    @bill = current_user
-              .accounts
-              .find(bill_params[:account_id])
-              .bills
-              .build(bill_params)
+    account = current_user.account.presence
 
-    flash[:notice] = "Fatura criada." if @bill.save
-    respond_with(@bill, location: bills_path)
+    if account.nil?
+      flash[:alert] = "Conta não encontrada ou não pertence ao usuário atual."
+      respond_with(nil, location: bills_path, status: :unprocessable_entity)
+      return
+    end
+
+    @bill = account.bills.build(bill_params)
+
+    if @bill.save
+      begin
+        @bill.generate_transaction! # Gera a primeira transação automaticamente
+        flash[:notice] = "Fatura criada e transação gerada com sucesso."
+      rescue => e
+        flash[:alert] = "Fatura criada, mas houve um erro ao gerar a transação: #{e.message}"
+      end
+      respond_with(@bill, location: bills_path)
+    else
+      flash[:alert] = "Erro ao criar fatura."
+      respond_with(@bill, location: bills_path, status: :unprocessable_entity)
+    end
   end
 
   def edit; end
@@ -44,7 +58,7 @@ class BillsController < ApplicationController
   private
 
   def set_bill
-    @bill = current_user.family.accounts.flat_map(&:bills).find(params[:id])
+    @bill = current_user.account.flat_map(&:bills).find(params[:id])
   end
 
   def bill_params

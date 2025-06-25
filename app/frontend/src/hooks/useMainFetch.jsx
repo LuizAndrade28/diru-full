@@ -3,33 +3,35 @@ import { useCallback, useEffect, useState } from "react";
 import { fetchTransactions } from "./fetchTransactions";
 import { fetchHigherCategory } from "./fetchHigherCategory";
 import { fetchUsersExpenses } from "./fetchUsersExpenses";
+import { fetchBillEnums } from "./fetchBillEnums";
 import { fetchEnums } from "./fetchEnums";
 import { fetchCurrentUser } from "./fetchCurrentUser";
 import { fetchUserAccount } from "./fetchUserAccount";
 import { fetchInvitesPending } from "./fetchInvitesPending";
 
-export function useMainFetch() {
+export function useMainFetch(startDate, endDate) {
   const [summary, setSummary] = useState(null);
 
   const loadData = useCallback(async () => {
     const [
-      transactions,
+      { transactions, my_transactions },
       higherCategory,
       usersExpenses,
+      billEnums,
       enums,
       user,
       userAccount,
       invites,
     ] = await Promise.all([
-      fetchTransactions(), // lista completa
-      fetchHigherCategory(), // agregação no backend
-      fetchUsersExpenses(), // agregação no backend
+      fetchTransactions(startDate, endDate), // Retorna { transactions, my_transactions }
+      fetchHigherCategory(startDate, endDate), // agregação no backend
+      fetchUsersExpenses(startDate, endDate), // agregação no backend
+      fetchBillEnums(), // meta-dados
       fetchEnums(), // meta-dados
       fetchCurrentUser(), // { id, first_name, … }
       fetchUserAccount(), // { id, … }
       fetchInvitesPending(), // [{id,…}]
     ]);
-
 
     /* ---- cálculos no front ---- */
     const total = transactions
@@ -54,6 +56,8 @@ export function useMainFetch() {
       );
 
     setSummary({
+      my_transactions,
+      billEnums,
       enums,
       user,
       userAccount,
@@ -62,9 +66,9 @@ export function useMainFetch() {
       higherBank,
       higherCategory,
       usersExpenses,
-      invites
+      invites,
     });
-  }, []);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     loadData();

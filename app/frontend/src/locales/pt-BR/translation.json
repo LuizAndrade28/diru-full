@@ -35,6 +35,26 @@
     "electronics": "Eletrônicos"
   },
 
+  "banks": {
+    "nubank": "Nubank",
+    "itau": "Itaú",
+    "bradesco": "Bradesco",
+    "santander": "Santander",
+    "caixa": "Caixa",
+    "banco_do_brasil": "Banco do Brasil",
+    "inter": "Inter",
+    "original": "Original",
+    "picpay": "PicPay",
+    "mercado_pago": "Mercado Pago",
+    "pagseguro": "PagSeguro",
+    "banrisul": "Banrisul",
+    "sicredi": "Sicredi",
+    "bmg": "BMG",
+    "next": "Next",
+    "agibank": "Agibank",
+    "bs2": "BS2"
+  },
+
   "transactions": {
     "date": "Data",
     "description": "Descrição",
@@ -42,8 +62,9 @@
     "category": "Categoria",
     "bank": "Banco",
     "type": {
-      "income": "Receita",
-      "expense": "Despesa"
+      "income": "Entrada",
+      "expense": "Despesa",
+      "reversal": "Estorno"
     },
     "owner": "Dono",
     "notes": "Observações",
@@ -52,10 +73,30 @@
     "new": "Nova transação"
   },
 
+  "dashboard": {
+    "last_transactions": "Últimas transações",
+    "resume": "Resumo dos Gastos",
+    "family_and_invites": "Família e convites",
+    "add_transaction": "Adicionar transação"
+  },
+
+  "family_invites": {
+    "delete": "Deletar convite",
+    "none": "Nenhum convite pendente",
+    "received": "Convites recebidos",
+    "sent": "Convites enviados",
+    "from": "Convite de",
+    "accept": "Aceitar convite",
+    "decline": "Recusar convite",
+    "leave": "Sair da família"
+  },
+
   "form": {
     "add_transaction": "Adicionar transação",
     "edit_transaction": "Editar transação",
     "delete_transaction": "Excluir transação",
+    "send" : "Enviar",
+    "sending": "Enviando...",
     "save": "Salvar",
     "cancel": "Cancelar",
     "confirm_delete": "Você tem certeza que deseja excluir esta transação?",
@@ -63,6 +104,19 @@
     "global": {
       "saving": "Salvando...",
       "save" : "Salvar"
+    },
+    "bills": {
+      "new": "Adicionar conta",
+      "amount": "Valor da conta",
+      "description": "Descrição",
+      "frequency": "Frequência",
+      "frequency_options": {
+        "single": "Única",
+        "weekly": "Semanal",
+        "monthly": "Mensal",
+        "yearly": "Anual"
+      },
+      "next_due_date": "Data de vencimento"
     }
   }
 }

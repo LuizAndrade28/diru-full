@@ -3,19 +3,12 @@ import { getCSRFToken } from "../src/utils/csrf";
 import { useTranslation } from "react-i18next";
 import { api } from "../src/utils/apiPath"
 
-import { useUserFamily } from "../src/hooks/auth";
-
-
-export default function InvitesInbox({ invites, onRespond , user }) {
+export default function InvitesInbox({ family, invites, onRespond , user }) {
   const { t } = useTranslation();
   const [email, setEmail]   = useState("");
   const [sending, setSending] = useState(false);
   const [err, setErr]         = useState(null);
-  let family;
 
-  if (user && user.family_id != null) {
-    family = useUserFamily();
-  }
 
   /* ---- envia novo convite ---------------------------------------- */
   async function sendInvite(e) {
@@ -63,7 +56,6 @@ export default function InvitesInbox({ invites, onRespond , user }) {
           <input
             type="email"
             className="form-control"
-            placeholder={t("invites.email_placeholder")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -71,7 +63,7 @@ export default function InvitesInbox({ invites, onRespond , user }) {
         </div>
         <div className="col-auto">
           <button className="btn btn-primary" disabled={sending}>
-            {sending ? t("global.saving") : t("invites.send")}
+            {sending ? t("form.sending") : t("form.send")}
           </button>
         </div>
       </form>
@@ -104,7 +96,7 @@ export default function InvitesInbox({ invites, onRespond , user }) {
                 }
               }}
             >
-              {t("invites.delete")}
+              {t("family_invites.leave")}
             </button>
           </div>
           <ul>
@@ -116,7 +108,7 @@ export default function InvitesInbox({ invites, onRespond , user }) {
       )}
 
       {invites.length === 0 ? (
-        <p className="text-muted">{t("invites.none")}</p>
+        <p className="text-muted">{t("family_invites.none")}</p>
       ) : (
         <ul className="list-group">
           {invites.map((inv) => (
@@ -126,10 +118,10 @@ export default function InvitesInbox({ invites, onRespond , user }) {
             >
               {user.email !== inv.invited_by.email ? (
                 <>
-                  <h5>{t("invites.received")}</h5>
+                  <h5>{t("family_invites.received")}</h5>
                   {inv.email} {" — "}{" "}
                   <small className="text-muted">
-                    {t("invites.from")} {inv.invited_by.first_name}{" "}
+                    {t("family_invites.from")} {inv.invited_by.first_name}{" "}
                     {" (" + inv.invited_by.email + ")"}{" "}
                   </small>
                   <span>
@@ -137,22 +129,22 @@ export default function InvitesInbox({ invites, onRespond , user }) {
                       className="btn btn-sm btn-success me-2"
                       onClick={() => post(api(`/invites/${inv.id}/accept`))}
                     >
-                      {t("invites.accept")}
+                      {t("family_invites.accept")}
                     </button>
                     <button
                       className="btn btn-sm btn-outline-secondary"
                       onClick={() => post(api(`/invites/${inv.id}/decline`))}
                     >
-                      {t("invites.decline")}
+                      {t("family_invites.decline")}
                     </button>
                   </span>
                 </>
               ) : (
                 <>
-                  <h5>{t("invites.sent")}</h5>
+                  <h5>{t("family_invites.sent")}</h5>
                   {inv.email} {" — "}{" "}
                   <small className="text-muted">
-                    {t("invites.from")} {inv.invited_by.first_name}{" "}
+                    {t("family_invites.from")} {inv.invited_by.first_name}{" "}
                     {" (" + inv.invited_by.email + ")"}{" "}
                   </small>
                   <span>
@@ -171,7 +163,7 @@ export default function InvitesInbox({ invites, onRespond , user }) {
                         onRespond();
                       }}
                     >
-                      {t("invites.delete")}
+                      {t("family_invites.delete")}
                     </button>
                   </span>
                 </>

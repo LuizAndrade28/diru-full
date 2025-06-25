@@ -1,23 +1,26 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_transaction, only: %i[edit update destroy]
+  before_action :set_scope, only: %i[index higher_category users_expenses]
 
   respond_to :html, :json
 
-  # GET /transactions
-  # filtros opcionais: ?kind=expense&start=2025-05-01&end=2025-05-31
   def index
-    scope = current_user.transactions
-    scope = scope.where(kind: params[:kind])               if params[:kind].present?
-    scope = scope.where(happened_at: params[:start]..params[:end]) \
-                    if params[:start].present? && params[:end].present?
+    # scope = scope.where(kind: params[:kind])               if params[:kind].present?
+    # binding.irb
+    @transactions = @scope.where(installments_qty: nil).where.not(user: current_user).order(happened_at: :desc)
+    @my_transactions = @scope.where(installments_qty: nil, user: current_user).order(happened_at: :desc)
 
-    @transactions = scope.order(happened_at: :desc)
-    respond_with(@transactions)
+    result = {
+      transactions: @transactions.as_json,
+      my_transactions: @my_transactions.as_json
+    }
+
+    render json: result
   end
 
   def higher_category
-    category_totals = current_user.transactions.where(kind: :expense).group(:category).sum(:amount)
+    category_totals = @scope.where(kind: :expense).group(:category).sum(:amount)
 
     highest_category, total = category_totals.max_by { |_, sum| sum }
     @transaction = { category: highest_category, total: total }
@@ -26,7 +29,7 @@ class TransactionsController < ApplicationController
   end
 
   def users_expenses
-    users_expenses_raw = current_user.transactions.where(kind: :expense).group(:owner).sum(:amount)
+    users_expenses_raw = @scope.where(kind: :expense).group(:owner).sum(:amount)
 
     result = users_expenses_raw.map do |owner, total|
       user = User.find_by(first_name: owner)
@@ -46,6 +49,11 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = current_user.transactions.build(transaction_params)
+
+    if @transaction.owner.blank?
+      @transaction.owner = current_user.first_name
+    end
+
     if @transaction.save
       flash[:notice] = "Transação criada."
       respond_with(@transaction, location: transactions_path)
@@ -72,6 +80,19 @@ class TransactionsController < ApplicationController
 
   def set_transaction
     @transaction = current_user.transactions.find(params[:id])
+  end
+
+  def set_scope
+    start_date = params[:start].presence || Date.current.beginning_of_month
+    end_date = params[:end].presence || Date.current.end_of_month
+
+    family_user_ids = current_user.family.users.where.not(id: current_user.id).pluck(:id) if current_user.family
+
+    @scope = Transaction
+              .where(user_id: (family_user_ids ? [ current_user.id ] + family_user_ids : current_user.id))
+              .where(happened_at: start_date..end_date)
+    @scope = @scope.where(happened_at: params[:start]..params[:end]) \
+                    if params[:start].present? && params[:end].present?
   end
 
   def transaction_params

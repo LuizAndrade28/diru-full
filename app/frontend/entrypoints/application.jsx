@@ -17,7 +17,6 @@ function App() {
   const user = useCurrentUser();
   // if (!user) return null;
 
-  /*  ⬇️  Três estados */
   if (user === undefined) return <Spinner />; // carregando
   if (user === false) return <Navigate to="/users/sign_in" replace />;
 

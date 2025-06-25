@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_26_215500) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_10_224514) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -65,6 +65,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_26_215500) do
     t.integer "category"
     t.string "owner"
     t.integer "bank_name"
+    t.integer "installment_number"
+    t.integer "installment_total"
     t.index ["account_id"], name: "index_transactions_on_account_id"
     t.index ["bank_name"], name: "index_transactions_on_bank_name"
     t.index ["bill_id"], name: "index_transactions_on_bill_id"
